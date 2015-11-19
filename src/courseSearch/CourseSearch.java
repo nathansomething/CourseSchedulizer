@@ -37,6 +37,7 @@ public class CourseSearch extends JFrame {
     private JCheckBox cbThu;
     private JCheckBox cbTue;
     private JCheckBox cbWed;
+    private JCheckBox cbSat;
     private JButton clearButton;
     private JComboBox courseAttributeComboBox;
     private JTextField courseNameTF;
@@ -85,11 +86,12 @@ public class CourseSearch extends JFrame {
         locationLabel = new JLabel();
         locationComboBox = new JComboBox();
         meetingPanel = new JPanel();
-        cbMon = new JCheckBox();
-        cbTue = new JCheckBox();
-        cbWed = new JCheckBox();
-        cbThu = new JCheckBox();
-        cbFri = new JCheckBox();
+        cbMon = new JCheckBox("M");
+        cbTue = new JCheckBox("T");
+        cbWed = new JCheckBox("W");
+        cbThu = new JCheckBox("R");
+        cbFri = new JCheckBox("F");
+        cbSat = new JCheckBox("S");
         timePanel = new JPanel();
         startTimeComboBox = new JComboBox();
         endTimeComboBox = new JComboBox();
@@ -144,6 +146,48 @@ public class CourseSearch extends JFrame {
         			}
         			queryString += "id LIKE \'%" + courseNumberTF.getText() + "%\'";
         		}
+        		if (cbMon.isSelected()) {
+        			if (!queryString.equals("")) {
+        				queryString += " AND ";
+        			}
+        			queryString += "monday = true";
+        		}
+        		if (cbMon.isSelected()) {
+        			if (!queryString.equals("")) {
+        				queryString += " AND ";
+        			}
+        			queryString += "monday = true";
+        		}
+        		if (cbTue.isSelected()) {
+        			if (!queryString.equals("")) {
+        				queryString += " AND ";
+        			}
+        			queryString += "tuesday = true";
+        		}
+        		if (cbWed.isSelected()) {
+        			if (!queryString.equals("")) {
+        				queryString += " AND ";
+        			}
+        			queryString += "wednesday = true";
+        		}
+        		if (cbThu.isSelected()) {
+        			if (!queryString.equals("")) {
+        				queryString += " AND ";
+        			}
+        			queryString += "thursday = true";
+        		}
+        		if (cbFri.isSelected()) {
+        			if (!queryString.equals("")) {
+        				queryString += " AND ";
+        			}
+        			queryString += "friday = true";
+        		}
+        		if (cbSat.isSelected()) {
+        			if (!queryString.equals("")) {
+        				queryString += " AND ";
+        			}
+        			queryString += "saturday = true";
+        		}
         		if (!queryString.equals("")) {
         			queryString = "WHERE " + queryString;
         		}
@@ -180,11 +224,7 @@ public class CourseSearch extends JFrame {
         jComboBox1.setModel(new DefaultComboBoxModel(new String[] { "0", "1", "4", " " }));
         locationLabel.setText("Location:");
         locationComboBox.setModel(new DefaultComboBoxModel(new String[] { "Boston", "Seattle", "Charlotte", "Other locations" }));
-        cbMon.setText("M");
-        cbTue.setText("T");
-        cbWed.setText("W");
-        cbThu.setText("R");
-        cbFri.setText("F");
+
         startTimeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "12 AM", "1 AM", "2 AM", "3 AM", "4 AM", "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM ", "5 PM", "6 PM", "7 PM ", "8 PM", "9 PM", "10 PM", "11 PM" }));
         endTimeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "12 AM", "1 AM", "2 AM", "3 AM", "4 AM", "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM ", "5 PM", "6 PM", "7 PM ", "8 PM", "9 PM", "10 PM", "11 PM" }));
         startTimeLabel.setText("Start at or after:");
@@ -318,7 +358,8 @@ public class CourseSearch extends JFrame {
                     .addComponent(cbMon)
                     .addComponent(cbTue)
                     .addComponent(cbWed)
-                    .addComponent(cbThu))
+                    .addComponent(cbThu)
+                    .addComponent(cbSat))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(timePanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -337,6 +378,8 @@ public class CourseSearch extends JFrame {
                         .addComponent(cbThu)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbFri)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbSat)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(meetingPanelLayout.createSequentialGroup()
                         .addContainerGap()
