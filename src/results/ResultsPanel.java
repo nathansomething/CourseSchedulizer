@@ -5,25 +5,27 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import javax.swing.DefaultListModel;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.ParallelGroup;
+import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+import schedule.Schedule;
 import dataRetriever.Course;
 import dataRetriever.DataRetriever;
 
@@ -33,7 +35,7 @@ import dataRetriever.DataRetriever;
  *
  */
 public class ResultsPanel extends JPanel {
-	
+	private String query;
 	
 	public enum Weekday {Monday, Tuesday, Wednesday, Thursday, Friday};
 
@@ -47,13 +49,14 @@ public class ResultsPanel extends JPanel {
 	Color courseInfoBackgroundColor = Color.LIGHT_GRAY;
 	
 	public ResultsPanel(String query) {
+		this.query = query;
 		
 		DataRetriever dataRetriever;
 		List<Course> courses = new ArrayList<>();
 		
 		try {
 			dataRetriever = new DataRetriever();
-			courses = dataRetriever.getData(query);
+			courses = dataRetriever.getData(this.query);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -68,61 +71,51 @@ public class ResultsPanel extends JPanel {
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.getVerticalScrollBar().setUnitIncrement(5);
 		add(scrollPane, BorderLayout.CENTER);
-
-		DefaultListModel<JPanel> listModel = new DefaultListModel<JPanel>();
-		JList<JPanel> courseList = new JList<JPanel>(listModel);
 		
+		JPanel courseList = new JPanel();
+		GroupLayout gl_courseList = new GroupLayout(courseList);
+		ParallelGroup parallelGroup = gl_courseList.createParallelGroup();
+		SequentialGroup seqGroup = gl_courseList.createSequentialGroup();
+				
 		// Loop to populate results with courses.
 		for (Course course : courses) {
-			//System.out.println(course);
-			setCourseBarColor(0);
 			JPanel coursePanel = this.createCoursePanel(course);
-			listModel.addElement(coursePanel);
+			coursePanel.addMouseListener(new CourseClickListener(newExpand, newCollapse));
+			seqGroup.addComponent(coursePanel,  GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+			seqGroup.addGap(10);
+			parallelGroup.addComponent(coursePanel,  GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
+			courseList.add(coursePanel);
 		}
 		
-		courseList.setCellRenderer(new ResultCellRenderer());
-		courseList.addMouseListener(new SelectedCourseListener(listModel, newExpand, newCollapse));
-		
+		gl_courseList.setHorizontalGroup(parallelGroup);
+		gl_courseList.setVerticalGroup(seqGroup);
+		courseList.setLayout(gl_courseList);
 		scrollPane.setViewportView(courseList);
 	}
 
 	public ResultsPanel getResultsPanel() {
 		return this;
 	}
-
-	private void setCourseBarColor(int index) {
-		Color darkBlue = new Color(51,102,255);
-		Color lightBlue = new Color(153, 204, 255);
-		Color darkGreen = new Color(51, 153, 0);
-		Color lightGreen = new Color(204, 255, 153);
-		Color darkRed = new Color(204, 0, 0);
-		Color lightRed = new Color(255, 153, 153);
-		
-//		if (index % 3 == 0) {
-//			courseBarBackgroundColor = darkBlue;
-//			courseInfoBackgroundColor = lightBlue;
-//		}
-//		else if (index % 3 == 1) {
-//			courseBarBackgroundColor = darkGreen;
-//			courseInfoBackgroundColor = lightGreen;
-//		}
-//		else {
-//			courseBarBackgroundColor = darkRed;
-//			courseInfoBackgroundColor = lightRed;
-//		}
-		courseBarBackgroundColor = darkBlue;
-		courseInfoBackgroundColor = lightBlue;
-		
+	
+	public boolean isCourseBar(JPanel panel) {
+		return panel.getName().equals("courseBar");
 	}
 	
 	private JPanel createCoursePanel(Course searchResult) {
 		JPanel course = new JPanel();
+		course.setName("course: " + searchResult.id);
 		course.setBorder(new LineBorder(Color.black));
 		course.setLayout(new BorderLayout(0, 0));
-
+		course.add(this.createCourseBar(searchResult), BorderLayout.NORTH);
+		course.add(this.createCourseInfo(searchResult), BorderLayout.CENTER);
+		return course;
+	}
+	
+	private JPanel createCourseBar(Course searchResult) {
+		setCourseBarColor(0);
 		JPanel courseBar = new JPanel();
+		courseBar.setName("courseBar");
 		courseBar.setBackground(courseBarBackgroundColor);
-		course.add(courseBar, BorderLayout.NORTH);
 		courseBar.setLayout(new BorderLayout(0, 0));
 		courseBar.setPreferredSize(new Dimension(courseBar.getWidth(), courseBar.getHeight() + 60));
 
@@ -136,13 +129,15 @@ public class ResultsPanel extends JPanel {
 		courseInfoToggle.setIcon(new ImageIcon(newExpand));
 		courseInfoToggle.setName("courseInfoToggle_" + searchResult.id);
 		courseBar.add(courseInfoToggle, BorderLayout.EAST);
-
+		return courseBar;
+	}
+	
+	private JPanel createCourseInfo(Course searchResult) {
 		JPanel courseInfo = new JPanel();
-		courseInfo.setName("courseInfo_" + searchResult.id);
+		courseInfo.setName("courseInfo");
 		courseInfo.setVisible(false);
 		courseInfo.setBackground(courseInfoBackgroundColor);
 		courseInfo.setLayout(new BorderLayout(0, 0));
-		course.add(courseInfo, BorderLayout.CENTER);
 
 		JLabel crnLbl = new JLabel(" CRN: " + searchResult.crn);
 		crnLbl.setForeground(new Color(0, 0, 0));
@@ -183,31 +178,49 @@ public class ResultsPanel extends JPanel {
 
 		JButton viewCalendar = new JButton("View Calendar");
 		scheduleOptions.add(viewCalendar);
+		viewCalendar.addActionListener(new ActionListener() {
+			@Override
+		   public void actionPerformed(ActionEvent e) {
+			  Schedule schedule = Schedule.getInstance();
+		      schedule.setModal(true);
+		      schedule.setVisible(true);
+		      return;
+		   }
+		});
 
 		JButton registerCourse = new JButton("Register For Course");
 		scheduleOptions.add(registerCourse);
 
-		/*for (Weekday day : Weekday.values()) {
-			JCheckBox dayBox = new JCheckBox();
-			String dayString = day.toString();
-			dayBox.setText(dayString);
-			dayBox.setEnabled(false);
-			JLabel meetingTime = new JLabel("---");
-			Map<String, MeetingTime> meetings = searchResult.getMeetings();
-
-			if (meetings.containsKey(dayString)) {
-				dayBox.setSelected(true);
-				meetingTime = new JLabel(meetings.get(dayString).toString());
-			}
-			courseMeetings.add(dayBox);
-			courseMeetings.add(meetingTime);
-		}
-
-		for (String attr : searchResult.getAttributes()) {
-			JLabel courseAttribute = new JLabel(attr);
-			courseAttributes.add(courseAttribute);
-		}*/
+//		for (Weekday day : Weekday.values()) {
+//			JCheckBox dayBox = new JCheckBox();
+//			String dayString = day.toString();
+//			dayBox.setText(dayString);
+//			dayBox.setEnabled(false);
+//			JLabel meetingTime = new JLabel("---");
+//			Map<String, MeetingTime> meetings = searchResult.getMeetings();
+//
+//			if (meetings.containsKey(dayString)) {
+//				dayBox.setSelected(true);
+//				meetingTime = new JLabel(meetings.get(dayString).toString());
+//			}
+//			courseMeetings.add(dayBox);
+//			courseMeetings.add(meetingTime);
+//		}
+//
+//		for (String attr : searchResult.getAttributes()) {
+//			JLabel courseAttribute = new JLabel(attr);
+//			courseAttributes.add(courseAttribute);
+//		}
 		
-		return course;
+		return courseInfo;
+	}
+	
+	private void setCourseBarColor(int index) {
+		Color darkBlue = new Color(51,102,255);
+		Color lightBlue = new Color(153, 204, 255);
+		
+		courseBarBackgroundColor = darkBlue;
+		courseInfoBackgroundColor = lightBlue;
+		
 	}
 }

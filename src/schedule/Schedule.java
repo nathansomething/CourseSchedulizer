@@ -10,13 +10,21 @@ package schedule;
  *
  * @author Bill
  */
-public class Schedule extends javax.swing.JFrame {
-
+public class Schedule extends javax.swing.JDialog {
+	private static Schedule schedule;
+	
     /**
      * Creates new form Calendar
      */
-    public Schedule() {
+    private Schedule() {
         initComponents();
+    }
+    
+    public static Schedule getInstance() {
+    	if (schedule == null) {
+    		schedule = new Schedule();
+    	}
+    	return schedule;
     }
 
     /**
@@ -53,7 +61,7 @@ public class Schedule extends javax.swing.JFrame {
         jPanel7 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(600, 700));
 
         jLabel11.setText("6:00");
@@ -284,7 +292,7 @@ public class Schedule extends javax.swing.JFrame {
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
+        
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
