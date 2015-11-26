@@ -1,4 +1,10 @@
 package courseSearch;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
+
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -8,25 +14,18 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import results.ResultsPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.UIManager;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
-import java.awt.event.InputMethodListener;
-import java.awt.EventQueue;
-import java.awt.GridLayout;
-import java.awt.event.InputMethodEvent;
+import javax.swing.border.EmptyBorder;
+
+import results.ResultsPanel;
 
 public class CourseSearch extends JFrame {
-
+	private static final int SCREEN_WIDTH = (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getWidth());
 	private JTextField CRNTF;
     private JTextField courseNumberTF;
     private JPanel adminPanel;
@@ -69,14 +68,14 @@ public class CourseSearch extends JFrame {
     private JComboBox startTimeComboBox;
     private JSplitPane splitPane;
     private ResultsPanel resultsPanel;
-    private JPanel awesomeCourseSearchPanel;
+    private JPanel searchPanel;
     
     /**
      * Creates new form CourseSearch
      */
     public CourseSearch() {
+    	searchPanel = new JPanel();
     	adminPanel = new JPanel();
-    	awesomeCourseSearchPanel = new JPanel();
         profComboBox = new JComboBox();
         professorLabel = new JLabel();
         semesterLabel = new JLabel();
@@ -105,7 +104,7 @@ public class CourseSearch extends JFrame {
         departmentLabel = new JLabel();
         departmentTF = new JComboBox();
         courseNumberLabel = new JLabel();
-        courseNumberTF = new JTextField();   
+        courseNumberTF = new JTextField();  
         attributePanel = new JPanel();
         courseAttributeLabel = new JLabel();
         courseAttributeComboBox = new JComboBox();
@@ -119,98 +118,131 @@ public class CourseSearch extends JFrame {
         setWindowProperties();
         initElements();
         setLayouts();
-        
-        this.resultsPanel = new ResultsPanel("");
-        this.splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, awesomeCourseSearchPanel, resultsPanel.getResultsPanel());
-        getContentPane().add(splitPane);
 
-        pack();
+        this.resultsPanel = new ResultsPanel("");
+        this.setResultsPanelDimensions();
+        this.searchPanel.setMinimumSize(new Dimension(0, 0));
+        this.searchPanel.setPreferredSize(new Dimension(SCREEN_WIDTH / 2, 800));
+        this.searchPanel.setBorder(new EmptyBorder(10, 0, 0, 10));
+        this.splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, searchPanel, resultsPanel.getResultsPanel());
+        this.setSplitPaneOptions();
         
-        searchButton.addMouseListener(new MouseAdapter() {
-        	
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		String queryString = "";
-        		if (!courseNameTF.getText().equals("")) {
-        			queryString += "name LIKE \'%" + courseNameTF.getText() + "%\'";
-        		}
-        		if (!CRNTF.getText().equals("")) {
-        			if (!queryString.equals("")) {
-        				queryString += " AND ";
-        			}
-        			queryString += "crn = \'" + CRNTF.getText() + "\'";
-        		}
-        		if (!courseNumberTF.getText().equals("")) {
-        			if (!queryString.equals("")) {
-        				queryString += " AND ";
-        			}
-        			queryString += "id LIKE \'%" + courseNumberTF.getText() + "%\'";
-        		}
-        		if (cbMon.isSelected()) {
-        			if (!queryString.equals("")) {
-        				queryString += " AND ";
-        			}
-        			queryString += "monday = true";
-        		}
-        		if (cbMon.isSelected()) {
-        			if (!queryString.equals("")) {
-        				queryString += " AND ";
-        			}
-        			queryString += "monday = true";
-        		}
-        		if (cbTue.isSelected()) {
-        			if (!queryString.equals("")) {
-        				queryString += " AND ";
-        			}
-        			queryString += "tuesday = true";
-        		}
-        		if (cbWed.isSelected()) {
-        			if (!queryString.equals("")) {
-        				queryString += " AND ";
-        			}
-        			queryString += "wednesday = true";
-        		}
-        		if (cbThu.isSelected()) {
-        			if (!queryString.equals("")) {
-        				queryString += " AND ";
-        			}
-        			queryString += "thursday = true";
-        		}
-        		if (cbFri.isSelected()) {
-        			if (!queryString.equals("")) {
-        				queryString += " AND ";
-        			}
-        			queryString += "friday = true";
-        		}
-        		if (cbSat.isSelected()) {
-        			if (!queryString.equals("")) {
-        				queryString += " AND ";
-        			}
-        			queryString += "saturday = true";
-        		}
-        		if (!queryString.equals("")) {
-        			queryString = "WHERE " + queryString;
-        		}
-        		
-//        		JOptionPane.showMessageDialog(null, "Mouse Exit");
-        		splitPane.remove(resultsPanel);
-        		resultsPanel = new ResultsPanel(queryString);
-                splitPane.add(resultsPanel);
-//                getContentPane().add(splitPane);
-//        		
-//                splitPane.revalidate();
-//                splitPane.repaint();
-//                setVisible(true);
-        	}
-        	
-        });
+        getContentPane().add(splitPane);
+        getRootPane().setDefaultButton(searchButton);
+        pack();
     }
+    
+    private void setSplitPaneOptions() {
+    	this.splitPane.setBackground(Color.BLACK);
+        this.splitPane.setContinuousLayout(true);
+        this.splitPane.setDividerSize(7);
+        this.splitPane.setBorder(new EmptyBorder(0,0,0,0));
+        this.splitPane.setDividerLocation(SCREEN_WIDTH / 2);
+        this.splitPane.setResizeWeight(1);
+    }
+    
+    private void setResultsPanelDimensions() {
+        this.resultsPanel.setMinimumSize(new Dimension(0, 0));
+        this.resultsPanel.setPreferredSize(new Dimension(700, 800));
+        this.resultsPanel.setBorder(new EmptyBorder(10, 10, 0, 0));
+    }
+        
+    public void runSearch() {
+    	String queryString = "";
+    	if (!courseNameTF.getText().equals("")) {
+    		queryString += "name LIKE \'%" + courseNameTF.getText() + "%\'";
+    	}
+    	if (!CRNTF.getText().equals("")) {
+    		if (!queryString.equals("")) {
+    			queryString += " AND ";
+    		}
+    		queryString += "crn = \'" + CRNTF.getText() + "\'";
+    	}
+    	if (!courseNumberTF.getText().equals("")) {
+    		if (!queryString.equals("")) {
+    			queryString += " AND ";
+    		}
+    		queryString += "id LIKE \'%" + courseNumberTF.getText() + "%\'";
+    	}
+    	if (cbMon.isSelected()) {
+    		if (!queryString.equals("")) {
+    			queryString += " AND ";
+    		}
+    		queryString += "monday = true";
+    	}
+    	if (cbMon.isSelected()) {
+    		if (!queryString.equals("")) {
+    			queryString += " AND ";
+    		}
+    		queryString += "monday = true";
+    	}
+    	if (cbTue.isSelected()) {
+    		if (!queryString.equals("")) {
+    			queryString += " AND ";
+    		}
+    		queryString += "tuesday = true";
+    	}
+    	if (cbWed.isSelected()) {
+    		if (!queryString.equals("")) {
+    			queryString += " AND ";
+    		}
+    		queryString += "wednesday = true";
+    	}
+    	if (cbThu.isSelected()) {
+    		if (!queryString.equals("")) {
+    			queryString += " AND ";
+    		}
+    		queryString += "thursday = true";
+    	}
+    	if (cbFri.isSelected()) {
+    		if (!queryString.equals("")) {
+    			queryString += " AND ";
+    		}
+    		queryString += "friday = true";
+    	}
+    	if (cbSat.isSelected()) {
+    		if (!queryString.equals("")) {
+    			queryString += " AND ";
+    		}
+    		queryString += "saturday = true";
+    	}
+    	if (!queryString.equals("")) {
+    		queryString = "WHERE " + queryString;
+    	}
+
+    	this.splitPane.remove(resultsPanel);
+    	this.resultsPanel = new ResultsPanel(queryString);
+    	this.setResultsPanelDimensions();
+    	this.splitPane.add(resultsPanel);
+        this.setSplitPaneOptions();
+    }
+    
+//    private void setCourseSearchBindings(JComponent parent) {
+//    	for (Component component : parent.getComponents()) {
+//    		if (component instanceof JComponent) {
+//	    		JComponent child = (JComponent) component;
+//	    		if (child.getComponents().length > 0) {
+//	    			child.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "pressed");
+//	    			child.getActionMap().put("pressed", new SearchAction(this));
+//	    			this.setCourseSearchBindings(child);
+//	    			return;
+//	    		}
+//	    		else if (child instanceof JComboBox) {
+//	    			JComboBox childCB = (JComboBox) child;
+//    			}
+//    			else { 
+//    				child.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "pressed");
+//	    		}
+//    	        child.getActionMap().put("pressed", new SearchAction(this));
+//    		}
+//    	}
+//    }
 
     private void setWindowProperties() {
     	setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Course Search");
         setMaximumSize(new java.awt.Dimension(1900, 1280));
-        setPreferredSize(new java.awt.Dimension(1400, 800));
+        setPreferredSize(new java.awt.Dimension(SCREEN_WIDTH, 800));
     }
     
     private void initElements() {
@@ -234,32 +266,31 @@ public class CourseSearch extends JFrame {
         departmentLabel.setText("Department:");
         departmentTF.setModel(new DefaultComboBoxModel(new String[] { "Bouvé College of Health Sciences", "College of Arts, Media and Design", "College of Computer and Information Science", "College of Engineering", "College of Professional Studies", "College of Science", "College of Social Sciences and Humanities", "D'Amore-McKim School of Business", "Program for Undeclared Students", "School of Law" }));
         courseNumberLabel.setText("Course Number:");
-        awesomeCourseSearchPanel.add(adminPanel);
+        searchPanel.add(adminPanel);
         adminPanel.getAccessibleContext().setAccessibleName("Administrative");
         meetingPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Meeting Times"));
         timePanel.setBorder(BorderFactory.createTitledBorder("Time of Day"));
-        awesomeCourseSearchPanel.add(meetingPanel);
+        searchPanel.add(meetingPanel);
         coursePanel.setBorder(BorderFactory.createTitledBorder("Course"));
-        awesomeCourseSearchPanel.add(coursePanel);
+        searchPanel.add(coursePanel);
         attributePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Attributes and Distinctions"));
         courseAttributeLabel.setText("Course Attribute:");
         courseAttributeComboBox.setModel(new DefaultComboBoxModel(new String[] { "Any", "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbHonors.setText("Search for honors (HON) classes");
-        awesomeCourseSearchPanel.add(criteriaPanel);
-        awesomeCourseSearchPanel.add(attributePanel);
+        searchPanel.add(criteriaPanel);
+        searchPanel.add(attributePanel);
         criteriaPanel.setBorder(BorderFactory.createTitledBorder("Your Search Criteria"));
         searchCriteriaLabel.setText("In the final product your search criteria will appear here");
-        awesomeCourseSearchPanel.add(jPanel3);
+        searchPanel.add(jPanel3);
         searchButton.setText("Search!");
         clearButton.setText("Clear criteria");
-        awesomeCourseSearchPanel.add(jPanel2);
-        
-        
+        searchPanel.add(jPanel2);
+        searchButton.addActionListener(new SearchButtonListener(this));
     }
     
     private void setLayouts() {
         
-        awesomeCourseSearchPanel.setLayout(new GridLayout(4, 2));
+        searchPanel.setLayout(new GridLayout(4, 2));
         GroupLayout adminPanelLayout = new GroupLayout(adminPanel);
         adminPanel.setLayout(adminPanelLayout);
         adminPanelLayout.setHorizontalGroup(
