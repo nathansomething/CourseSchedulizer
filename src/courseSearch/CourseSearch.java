@@ -1,8 +1,13 @@
 package courseSearch;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.Toolkit;
 
 import javax.swing.BorderFactory;
@@ -32,17 +37,17 @@ public class CourseSearch extends JFrame {
     private JPanel attributePanel;
     private JCheckBox cbFri;
     private JCheckBox cbHonors;
+    private JCheckBox cbCompCultures;
     private JCheckBox cbMon;
     private JCheckBox cbThu;
     private JCheckBox cbTue;
     private JCheckBox cbWed;
     private JCheckBox cbSat;
     private JButton clearButton;
-    private JComboBox courseAttributeComboBox;
     private JTextField courseNameTF;
     private JPanel coursePanel;
     private JPanel criteriaPanel;
-    private JComboBox departmentTF;
+    private JTextField departmentTF;
     private JComboBox endTimeComboBox;
     private JComboBox jComboBox1;
     private JLabel startTimeLabel;
@@ -56,7 +61,6 @@ public class CourseSearch extends JFrame {
     private JLabel professorLabel;
     private JLabel semesterLabel;
     private JLabel courseNumberLabel;
-    private JLabel courseAttributeLabel;
     private JPanel timePanel;
     private JPanel jPanel2;
     private JPanel jPanel3;
@@ -69,6 +73,10 @@ public class CourseSearch extends JFrame {
     private JSplitPane splitPane;
     private ResultsPanel resultsPanel;
     private JPanel searchPanel;
+    
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
     
     /**
      * Creates new form CourseSearch
@@ -102,13 +110,15 @@ public class CourseSearch extends JFrame {
         crnLabel = new JLabel();
         CRNTF = new JTextField();        
         departmentLabel = new JLabel();
-        departmentTF = new JComboBox();
+        departmentTF = new JTextField();
         courseNumberLabel = new JLabel();
         courseNumberTF = new JTextField();  
         attributePanel = new JPanel();
-        courseAttributeLabel = new JLabel();
-        courseAttributeComboBox = new JComboBox();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
         cbHonors = new JCheckBox();
+        cbCompCultures = new JCheckBox();
         criteriaPanel = new JPanel();
         searchCriteriaLabel = new JLabel();
         jPanel3 = new JPanel();
@@ -122,13 +132,27 @@ public class CourseSearch extends JFrame {
         this.resultsPanel = new ResultsPanel("");
         this.setResultsPanelDimensions();
         this.searchPanel.setMinimumSize(new Dimension(0, 0));
-        this.searchPanel.setPreferredSize(new Dimension(SCREEN_WIDTH / 2, 800));
+        this.searchPanel.setPreferredSize(new Dimension(SCREEN_WIDTH / 4, 800));
         this.searchPanel.setBorder(new EmptyBorder(10, 0, 0, 10));
+        
         this.splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, searchPanel, resultsPanel.getResultsPanel());
+        
         this.setSplitPaneOptions();
         
         getContentPane().add(splitPane);
         getRootPane().setDefaultButton(searchButton);
+        
+        
+
+        jMenu1.setText("Help");
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("About");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
+
+        
         pack();
     }
     
@@ -246,6 +270,15 @@ public class CourseSearch extends JFrame {
     }
     
     private void initElements() {
+        
+        
+        java.awt.GridBagConstraints g = new java.awt.GridBagConstraints();
+        g.fill = GridBagConstraints.BOTH;
+        
+        JPanel enclosingPanel = new JPanel();
+        
+        enclosingPanel.setPreferredSize(new java.awt.Dimension(SCREEN_WIDTH * 2 / 3, 800));
+        enclosingPanel.setLayout(new GridBagLayout());
     	clearButton = new javax.swing.JButton();
     	adminPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Administrative"));
         profComboBox.setModel(new DefaultComboBoxModel(new String[] { "Any", "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -263,34 +296,60 @@ public class CourseSearch extends JFrame {
         endTimeLabel.setText("End at or before:");
         courseNameLabel.setText("Name of Course:");
         crnLabel.setText("CRN:");
-        departmentLabel.setText("Department:");
-        departmentTF.setModel(new DefaultComboBoxModel(new String[] { "Bouvé College of Health Sciences", "College of Arts, Media and Design", "College of Computer and Information Science", "College of Engineering", "College of Professional Studies", "College of Science", "College of Social Sciences and Humanities", "D'Amore-McKim School of Business", "Program for Undeclared Students", "School of Law" }));
+        departmentLabel.setText("Dept. Header:");
         courseNumberLabel.setText("Course Number:");
-        searchPanel.add(adminPanel);
+        
+        g.gridx = 0;
+        g.gridy = 0;
+        enclosingPanel.add(adminPanel, g);
+        
         adminPanel.getAccessibleContext().setAccessibleName("Administrative");
         meetingPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Meeting Times"));
         timePanel.setBorder(BorderFactory.createTitledBorder("Time of Day"));
-        searchPanel.add(meetingPanel);
+        
+        g.gridx = 1;
+        g.gridy = 0;
+        enclosingPanel.add(meetingPanel, g);
+        
         coursePanel.setBorder(BorderFactory.createTitledBorder("Course"));
-        searchPanel.add(coursePanel);
+        
+        g.gridx = 0;
+        g.gridy = 1;
+        enclosingPanel.add(coursePanel, g);        
         attributePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Attributes and Distinctions"));
-        courseAttributeLabel.setText("Course Attribute:");
-        courseAttributeComboBox.setModel(new DefaultComboBoxModel(new String[] { "Any", "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbHonors.setText("Search for honors (HON) classes");
-        searchPanel.add(criteriaPanel);
-        searchPanel.add(attributePanel);
+        cbCompCultures.setText("Search for Comparative Cultures classes");
+        
+        g.gridx = 0;
+        g.gridy = 2;
+        enclosingPanel.add(criteriaPanel, g);
+        
+        g.gridx = 1;
+        g.gridy = 1;
+        enclosingPanel.add(attributePanel, g);
+        
         criteriaPanel.setBorder(BorderFactory.createTitledBorder("Your Search Criteria"));
-        searchCriteriaLabel.setText("In the final product your search criteria will appear here");
-        searchPanel.add(jPanel3);
+        searchCriteriaLabel.setText("Placeholder");
+        
         searchButton.setText("Search!");
         clearButton.setText("Clear criteria");
-        searchPanel.add(jPanel2);
+        
+        g.gridx = 1;
+        g.gridy = 2;
+        enclosingPanel.add(jPanel3, g);
+        
+        g.gridx = 0;
+        g.gridy = 3;
+        enclosingPanel.add(jPanel2, g);
+        
         searchButton.addActionListener(new SearchButtonListener(this));
+        searchPanel.add(enclosingPanel);
+        
     }
     
     private void setLayouts() {
         
-        searchPanel.setLayout(new GridLayout(4, 2));
+        searchPanel.setLayout(new GridLayout());
         GroupLayout adminPanelLayout = new GroupLayout(adminPanel);
         adminPanel.setLayout(adminPanelLayout);
         adminPanelLayout.setHorizontalGroup(
@@ -462,28 +521,22 @@ public class CourseSearch extends JFrame {
 
         GroupLayout attributePanelLayout = new GroupLayout(attributePanel);
         attributePanel.setLayout(attributePanelLayout);
+        attributePanel.setLayout(attributePanelLayout);
         attributePanelLayout.setHorizontalGroup(
-            attributePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            attributePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(attributePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(courseAttributeLabel)
-                .addGap(18, 18, 18)
-                .addComponent(courseAttributeComboBox, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(250, Short.MAX_VALUE))
-            .addGroup(attributePanelLayout.createSequentialGroup()
-                .addComponent(cbHonors)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(attributePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cbHonors)
+                    .addComponent(cbCompCultures))
+                .addGap(0, 56, Short.MAX_VALUE))
         );
         attributePanelLayout.setVerticalGroup(
-            attributePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            attributePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(attributePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(attributePanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(courseAttributeLabel)
-                    .addComponent(courseAttributeComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbHonors)
-                .addContainerGap(97, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cbCompCultures)
+                .addGap(0, 85, Short.MAX_VALUE))
         );
 
         GroupLayout criteriaPanelLayout = new GroupLayout(criteriaPanel);
