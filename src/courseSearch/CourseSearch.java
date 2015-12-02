@@ -141,8 +141,6 @@ public class CourseSearch extends JFrame {
         
         getContentPane().add(splitPane);
         getRootPane().setDefaultButton(searchButton);
-        
-        
 
         jMenu1.setText("Help");
         jMenuBar1.add(jMenu1);
@@ -152,7 +150,6 @@ public class CourseSearch extends JFrame {
 
         setJMenuBar(jMenuBar1);
 
-        
         pack();
     }
     
@@ -172,9 +169,25 @@ public class CourseSearch extends JFrame {
     }
         
     public void runSearch() {
-    	String queryString = "";
+    	String queryString = "WHERE ";
+    	
+    	//Get Time
+    	String[] startTimeStr = startTimeComboBox.getSelectedItem().toString().split(" ");
+    	Integer timeNum = Integer.parseInt(startTimeStr[0]);
+    	Boolean isPm = startTimeStr[1].equals("PM");
+    	if (isPm) {
+    		timeNum += 12;
+    	}
+    	queryString += "starttimeHour >= " + timeNum + " AND ";
+    	startTimeStr = endTimeComboBox.getSelectedItem().toString().split(" ");
+    	timeNum = Integer.parseInt(startTimeStr[0]);
+    	isPm = startTimeStr[1].equals("PM");
+    	if (isPm) {
+    		timeNum += 12;
+    	}
+    	queryString += "endtimeHour <= " + timeNum;
     	if (!courseNameTF.getText().equals("")) {
-    		queryString += "name LIKE \'%" + courseNameTF.getText() + "%\'";
+    		queryString += "lower(name) LIKE \'%" + courseNameTF.getText().toLowerCase() + "%\'";
     	}
     	if (!CRNTF.getText().equals("")) {
     		if (!queryString.equals("")) {
@@ -229,9 +242,6 @@ public class CourseSearch extends JFrame {
     			queryString += " AND ";
     		}
     		queryString += "saturday = true";
-    	}
-    	if (!queryString.equals("")) {
-    		queryString = "WHERE " + queryString;
     	}
 
     	this.splitPane.remove(resultsPanel);

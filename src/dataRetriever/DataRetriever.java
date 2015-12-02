@@ -29,7 +29,7 @@ public class DataRetriever {
 		if (!whereQuery.equals("")) {
 			this.query += whereQuery;
 		}
-		System.out.println(this.query);
+		System.out.println(this.query); //For Debugging
 		this.statement.executeQuery(this.query);
         ResultSet resultSet = statement.getResultSet();
         List<Course> courses = new ArrayList<>();
