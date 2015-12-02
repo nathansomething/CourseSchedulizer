@@ -243,6 +243,7 @@ public class CourseSearch extends JFrame {
     		}
     		queryString += "saturday = true";
     	}
+//    	if (locationComboBox.getSelectedItem().toString().equals())
 
     	this.splitPane.remove(resultsPanel);
     	this.resultsPanel = new ResultsPanel(queryString);
