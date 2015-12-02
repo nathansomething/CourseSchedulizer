@@ -174,6 +174,9 @@ public class CourseSearch extends JFrame {
     	//Get Time
     	String[] startTimeStr = startTimeComboBox.getSelectedItem().toString().split(" ");
     	Integer timeNum = Integer.parseInt(startTimeStr[0]);
+    	if (timeNum.equals(12)) {
+    		timeNum = 0;
+    	}
     	Boolean isPm = startTimeStr[1].equals("PM");
     	if (isPm) {
     		timeNum += 12;
@@ -216,7 +219,9 @@ public class CourseSearch extends JFrame {
     	if (cbSat.isSelected()) {
     		queryString += " AND saturday = true";
     	}
-//    	if (locationComboBox.getSelectedItem().toString().equals())
+    	if (!locationComboBox.getSelectedItem().toString().equals("")) {
+    		queryString += " AND location = \'" + locationComboBox.getSelectedItem().toString() + "\'";
+    	}
 
     	this.splitPane.remove(resultsPanel);
     	this.resultsPanel = new ResultsPanel(queryString);

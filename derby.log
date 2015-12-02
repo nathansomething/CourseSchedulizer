@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Wed Dec 02 16:02:19 EST 2015:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance a816c00e-0151-6480-c498-000005c92680 
+Wed Dec 02 16:19:55 EST 2015:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance a816c00e-0151-6490-e07b-000005c8ddb8 
 on database directory /home/nathan/Documents/Northeastern/Current Semester/IS 4300/Workspace/CourseSchedulizer/codejava/ClassData with class loader sun.misc.Launcher$AppClassLoader@14dad5dc 
 Loaded from file:/home/nathan/.m2/repository/org/apache/derby/derby/10.11.1.1/derby-10.11.1.1.jar
 java.vendor=Oracle Corporation
