@@ -178,70 +178,43 @@ public class CourseSearch extends JFrame {
     	if (isPm) {
     		timeNum += 12;
     	}
-    	queryString += "starttimeHour >= " + timeNum + " AND ";
+    	queryString += "starttimeHour >= " + timeNum;
     	startTimeStr = endTimeComboBox.getSelectedItem().toString().split(" ");
     	timeNum = Integer.parseInt(startTimeStr[0]);
     	isPm = startTimeStr[1].equals("PM");
     	if (isPm) {
     		timeNum += 12;
     	}
-    	queryString += "endtimeHour <= " + timeNum;
+    	queryString += " AND endtimeHour <= " + timeNum;
     	if (!courseNameTF.getText().equals("")) {
-    		queryString += "lower(name) LIKE \'%" + courseNameTF.getText().toLowerCase() + "%\'";
+    		queryString += " AND lower(name) LIKE \'%" + courseNameTF.getText().toLowerCase() + "%\' " ;
     	}
     	if (!CRNTF.getText().equals("")) {
-    		if (!queryString.equals("")) {
-    			queryString += " AND ";
-    		}
-    		queryString += "crn = \'" + CRNTF.getText() + "\'";
+    		queryString += " AND crn = \'" + CRNTF.getText() + "\'";
     	}
     	if (!courseNumberTF.getText().equals("")) {
-    		if (!queryString.equals("")) {
-    			queryString += " AND ";
-    		}
-    		queryString += "id LIKE \'%" + courseNumberTF.getText() + "%\'";
+    		queryString += " AND id LIKE \'%" + courseNumberTF.getText() + "%\'";
     	}
     	if (cbMon.isSelected()) {
-    		if (!queryString.equals("")) {
-    			queryString += " AND ";
-    		}
-    		queryString += "monday = true";
+    		queryString += " AND monday = true";
     	}
     	if (cbMon.isSelected()) {
-    		if (!queryString.equals("")) {
-    			queryString += " AND ";
-    		}
-    		queryString += "monday = true";
+    		queryString += " AND monday = true";
     	}
     	if (cbTue.isSelected()) {
-    		if (!queryString.equals("")) {
-    			queryString += " AND ";
-    		}
-    		queryString += "tuesday = true";
+    		queryString += " AND tuesday = true";
     	}
     	if (cbWed.isSelected()) {
-    		if (!queryString.equals("")) {
-    			queryString += " AND ";
-    		}
-    		queryString += "wednesday = true";
+    		queryString += " AND wednesday = true";
     	}
     	if (cbThu.isSelected()) {
-    		if (!queryString.equals("")) {
-    			queryString += " AND ";
-    		}
-    		queryString += "thursday = true";
+    		queryString += " AND thursday = true";
     	}
     	if (cbFri.isSelected()) {
-    		if (!queryString.equals("")) {
-    			queryString += " AND ";
-    		}
-    		queryString += "friday = true";
+    		queryString += " AND friday = true";
     	}
     	if (cbSat.isSelected()) {
-    		if (!queryString.equals("")) {
-    			queryString += " AND ";
-    		}
-    		queryString += "saturday = true";
+    		queryString += " AND saturday = true";
     	}
 //    	if (locationComboBox.getSelectedItem().toString().equals())
 
