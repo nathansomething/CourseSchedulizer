@@ -5,12 +5,14 @@ import java.util.List;
 
 public class Course {
 
-	public List<String> attributes;
+	public String classroom;
 	public Double credits;
 	public String crn;
 	public List<Day> days;
+	public String description;
 	public LocalTime endTime;
 	public String id;
+	public Boolean isHonors;
 	public String location;
 	public String name;
 	public String professor;
@@ -18,12 +20,13 @@ public class Course {
 	public String term;
 	
 	Course() {
-		this.attributes = new ArrayList<>();
+		this.classroom = "";
 		this.credits = 0.0;
 		this.crn = "";
 		this.days = new ArrayList<>();
 		this.endTime = null;
 		this.id = "";
+		this.isHonors = false;
 		this.location = "";
 		this.name = "";
 		this.professor = "";
@@ -34,11 +37,13 @@ public class Course {
 	@Override
 	public String toString() {
 		return "----------------------------------" +
-				"\nAttributes: " + this.attributes +
+				"\nClassroom: " + this.classroom +
 				"\nCredits: " + this.credits +
 				"\nCRN: " + this.crn +
 				"\nDays: " + this.days +
+				"\nDescription: " + this.description +
 				"\nEnd Time: " + this.endTime +
+				"\nHonors: " + this.isHonors.toString() +
 				"\nID: " + this.id +
 				"\nLocation: " + this.location +
 				"\nName: " + this.name +

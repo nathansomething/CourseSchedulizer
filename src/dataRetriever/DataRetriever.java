@@ -5,8 +5,11 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.RestoreAction;
 
 public class DataRetriever {
 
@@ -37,12 +40,13 @@ public class DataRetriever {
         	Course course = new Course();
         	course.crn = resultSet.getString("crn");
         	course.credits = resultSet.getDouble("credits");
-        	//course.endTime = LocalTime.of(resultSet.getTime("endtime").getHours(), resultSet.getTime("endtime").getMinutes());
+        	course.description = resultSet.getString("description");
+        	course.endTime = LocalTime.of(resultSet.getInt("starttimeHour"), resultSet.getInt("starttimeMinute"));
         	course.id = resultSet.getString("id");
         	course.location = resultSet.getString("location");
         	course.name = resultSet.getString("name");
         	course.professor = resultSet.getString("professor");
-        	//course.startTime = LocalTime.of(resultSet.getTime("starttime").getHours(), resultSet.getTime("starttime").getMinutes());
+        	course.startTime = LocalTime.of(resultSet.getInt("starttimeHour"), resultSet.getInt("starttimeMinute"));
         	course.term = resultSet.getString("term");
         	if (resultSet.getBoolean("monday")) {
         		course.days.add(Day.MONDAY);
