@@ -30,7 +30,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import schedule.ScheduleDialog;
+import schedule.Schedule;
 import util.Colors;
 import util.Fonts;
 import dataRetriever.Course;
@@ -49,7 +49,7 @@ public class ResultsPanel extends JPanel {
 	private static final Image NEW_COLLAPSE = COLLAPSE.getImage().getScaledInstance(COLLAPSE.getIconWidth() / 2, COLLAPSE.getIconHeight() / 2,  java.awt.Image.SCALE_SMOOTH );
 	private static final int COURSE_BAR_HEIGHT = 60;
 
-	private static final DateTimeFormatter hoursMinsAmPm = DateTimeFormatter.ofPattern("h:mm a");
+	private static final DateTimeFormatter HOURS_MINS_AM_PM = DateTimeFormatter.ofPattern("h:mm a");
 	
 	private static Color courseBarHoverColor = Colors.MEDIUM_ORANGE;
 	private static Color courseBarBackgroundColor = Colors.DARK_BLUE;
@@ -234,7 +234,7 @@ public class ResultsPanel extends JPanel {
 		viewCalendar.addActionListener(new ActionListener() {
 			@Override
 		   public void actionPerformed(ActionEvent e) {
-			  ScheduleDialog schedule = ScheduleDialog.getInstance();
+			  Schedule schedule = Schedule.getInstance();
 		      schedule.setModal(true);
 		      schedule.setVisible(true);
 		   }
@@ -261,7 +261,7 @@ public class ResultsPanel extends JPanel {
 			JLabel meetingTime = new JLabel("---");
 			if (searchResult.days.contains(day)) {
 				dayBox.setSelected(true);
-				meetingTime = new JLabel(searchResult.startTime.format(hoursMinsAmPm) + " - " + searchResult.endTime.format(hoursMinsAmPm));
+				meetingTime = new JLabel(searchResult.startTime.format(HOURS_MINS_AM_PM) + " - " + searchResult.endTime.format(HOURS_MINS_AM_PM));
 			}
 			courseMeetings.add(dayBox);
 			courseMeetings.add(meetingTime);
