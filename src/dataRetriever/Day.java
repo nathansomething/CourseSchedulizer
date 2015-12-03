@@ -7,5 +7,9 @@ public enum Day {
 	WEDNESDAY,
 	THURSDAY,
 	FRIDAY,
-	SATURDAY
+	SATURDAY;
+	
+	public String toTitleCase() {
+		return this.toString().substring(0, 1) + this.toString().substring(1).toLowerCase();
+	}
 }

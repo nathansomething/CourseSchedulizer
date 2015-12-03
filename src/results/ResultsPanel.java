@@ -1,4 +1,5 @@
 package results;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -8,6 +9,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,21 +17,25 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import schedule.Schedule;
+import schedule.ScheduleDialog;
 import util.Colors;
 import util.Fonts;
 import dataRetriever.Course;
 import dataRetriever.DataRetriever;
+import dataRetriever.Day;
 
 /**
  * The class for the results panel.  Use the getResultsPanel() method to add it to a JFrame.
@@ -42,6 +48,8 @@ public class ResultsPanel extends JPanel {
 	private static final Image NEW_EXPAND = EXPAND.getImage().getScaledInstance(EXPAND.getIconWidth() / 2, EXPAND.getIconHeight() / 2,  java.awt.Image.SCALE_SMOOTH );
 	private static final Image NEW_COLLAPSE = COLLAPSE.getImage().getScaledInstance(COLLAPSE.getIconWidth() / 2, COLLAPSE.getIconHeight() / 2,  java.awt.Image.SCALE_SMOOTH );
 	private static final int COURSE_BAR_HEIGHT = 60;
+
+	private static final DateTimeFormatter hoursMinsAmPm = DateTimeFormatter.ofPattern("h:mm a");
 	
 	private static Color courseBarHoverColor = Colors.MEDIUM_ORANGE;
 	private static Color courseBarBackgroundColor = Colors.DARK_BLUE;
@@ -153,7 +161,13 @@ public class ResultsPanel extends JPanel {
 		courseDetailsBorder.setVgap(10);
 		courseDetails.setLayout(courseDetailsBorder);
 
+		
+		JPanel courseDetails2 = new JPanel();
+		courseDetails.add(courseDetails2, BorderLayout.NORTH);
+		courseDetails2.setLayout(new BorderLayout(0, 0));
+
 		JTextField professorLbl = new JTextField(" Professor: " + searchResult.professor);
+		courseDetails2.add(professorLbl, BorderLayout.NORTH);
 		professorLbl.setEditable(false);
 		professorLbl.setFont(Fonts.LUCIDA_SMALL);
 		professorLbl.setForeground(Color.BLACK);
@@ -162,8 +176,25 @@ public class ResultsPanel extends JPanel {
 		professorLbl.setSelectionColor(Color.WHITE);
 		professorLbl.setHorizontalAlignment(SwingConstants.LEFT);
 		professorLbl.addMouseListener(TextHoverListener.getInstance());
-		courseDetails.add(professorLbl, BorderLayout.NORTH);
+		
 
+		JPanel courseDescriptionContainer = new JPanel();
+		courseDescriptionContainer.setBorder(new EmptyBorder(5, 5, 5, 5));
+		courseDescriptionContainer.setBackground(courseInfoBackgroundColor);
+		courseDescriptionContainer.setLayout(new BoxLayout(courseDescriptionContainer, BoxLayout.Y_AXIS));
+		
+		JTextArea courseDescription = new JTextArea();
+		courseDescription.setLineWrap(true);
+		courseDescription.setText(searchResult.description);
+		courseDescription.setEditable(false);
+		courseDescription.setFont(Fonts.LUCIDA_SMALL);
+		courseDescription.setForeground(Color.BLACK);
+		courseDescription.setBackground(courseInfoBackgroundColor);
+		courseDescription.setSelectionColor(Color.WHITE);
+		courseDescription.setWrapStyleWord(true);
+		courseDescriptionContainer.add(courseDescription);
+		courseDetails2.add(courseDescriptionContainer, BorderLayout.CENTER);
+		
 		JPanel courseMeetings = new JPanel();
 		courseMeetings.setBackground(courseInfoBackgroundColor);
 		TitledBorder courseMeetBorder = new TitledBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)), "Meeting Times", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0));
@@ -172,16 +203,16 @@ public class ResultsPanel extends JPanel {
 		courseDetails.add(courseMeetings);
 		courseMeetings.setLayout(new GridLayout(0, 2, 0, 0));
 
-		JPanel courseDetails2 = new JPanel();
-		courseDetails.add(courseDetails2, BorderLayout.SOUTH);
-		courseDetails2.setLayout(new BorderLayout(0, 0));
+		JPanel courseDetails3 = new JPanel();
+		courseDetails.add(courseDetails3, BorderLayout.SOUTH);
+		courseDetails3.setLayout(new BorderLayout(0, 0));
 
 		JPanel courseAttributes = new JPanel();
 		courseAttributes.setBackground(courseInfoBackgroundColor);
 		TitledBorder courseAttrsBorder = new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Attributes", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0));
 		courseAttrsBorder.setTitleFont(Fonts.LUCIDA_MEDIUM);
 		courseAttributes.setBorder(courseAttrsBorder);
-		courseDetails2.add(courseAttributes, BorderLayout.WEST);
+		courseDetails3.add(courseAttributes, BorderLayout.WEST);
 		courseAttributes.setLayout(new GridLayout(0, 1, 0, 0));
 		courseAttributes.setPreferredSize(new Dimension(courseAttributes.getWidth() + 250, courseAttributes.getHeight()));
 
@@ -191,7 +222,7 @@ public class ResultsPanel extends JPanel {
 		scheduleOptsBorder.setTitleFont(Fonts.LUCIDA_MEDIUM);
 		scheduleOptions.setBorder(scheduleOptsBorder);
 		
-		courseDetails2.add(scheduleOptions, BorderLayout.CENTER);
+		courseDetails3.add(scheduleOptions, BorderLayout.CENTER);
 
 		JButton viewCalendar = new JButton("View Calendar");
 		viewCalendar.setMargin(new Insets(10, 5, 10, 5));
@@ -203,7 +234,7 @@ public class ResultsPanel extends JPanel {
 		viewCalendar.addActionListener(new ActionListener() {
 			@Override
 		   public void actionPerformed(ActionEvent e) {
-			  Schedule schedule = Schedule.getInstance();
+			  ScheduleDialog schedule = ScheduleDialog.getInstance();
 		      schedule.setModal(true);
 		      schedule.setVisible(true);
 		   }
@@ -220,28 +251,34 @@ public class ResultsPanel extends JPanel {
 		registerCourse.setForeground(Color.WHITE);
 		registerCourse.addMouseListener(new ButtonHover(registerCourse.getBackground(), courseBarHoverColor));
 		scheduleOptions.add(registerCourse);
-
-//		for (Weekday day : Weekday.values()) {
-//			JCheckBox dayBox = new JCheckBox();
-//			String dayString = day.toString();
-//			dayBox.setText(dayString);
-//			dayBox.setEnabled(false);
-//			JLabel meetingTime = new JLabel("---");
-//			Map<String, MeetingTime> meetings = searchResult.getMeetings();
-//
-//			if (meetings.containsKey(dayString)) {
-//				dayBox.setSelected(true);
-//				meetingTime = new JLabel(meetings.get(dayString).toString());
-//			}
-//			courseMeetings.add(dayBox);
-//			courseMeetings.add(meetingTime);
-//		}
+		
+		for (Day day : Day.values()) {
+			JCheckBox dayBox = new JCheckBox();
+			dayBox.setDisabledIcon(dayBox.getIcon());
+			dayBox.setText(day.toTitleCase());
+			dayBox.setEnabled(false);
+			dayBox.setForeground(Color.BLACK);
+			JLabel meetingTime = new JLabel("---");
+			if (searchResult.days.contains(day)) {
+				dayBox.setSelected(true);
+				meetingTime = new JLabel(searchResult.startTime.format(hoursMinsAmPm) + " - " + searchResult.endTime.format(hoursMinsAmPm));
+			}
+			courseMeetings.add(dayBox);
+			courseMeetings.add(meetingTime);
+		}
 //
 //		for (String attr : searchResult.getAttributes()) {
 //			JLabel courseAttribute = new JLabel(attr);
 //			courseAttributes.add(courseAttribute);
 //		}
 		
+		if (searchResult.isHonors) {
+			JLabel honorsAttr = new JLabel();
+			honorsAttr.setText("Honors");
+			courseAttributes.add(honorsAttr);
+		}
+		
 		return courseInfo;
 	}
+
 }
