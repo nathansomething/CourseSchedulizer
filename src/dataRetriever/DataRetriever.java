@@ -41,7 +41,7 @@ public class DataRetriever {
         	course.crn = resultSet.getString("crn");
         	course.credits = resultSet.getDouble("credits");
         	course.description = resultSet.getString("description");
-        	course.endTime = LocalTime.of(resultSet.getInt("starttimeHour"), resultSet.getInt("starttimeMinute"));
+        	course.endTime = LocalTime.of(resultSet.getInt("endtimeHour"), resultSet.getInt("endtimeMinute"));
         	course.id = resultSet.getString("id");
         	course.location = resultSet.getString("location");
         	course.name = resultSet.getString("name");
