@@ -49,7 +49,7 @@ public class CourseSearch extends JFrame {
     private JPanel criteriaPanel;
     private JTextField departmentTF;
     private JComboBox endTimeComboBox;
-    private JComboBox jComboBox1;
+    private JComboBox numCreditsComboBox;
     private JLabel startTimeLabel;
     private JLabel searchCriteriaLabel;
     private JLabel creditsLabel;
@@ -62,8 +62,9 @@ public class CourseSearch extends JFrame {
     private JLabel semesterLabel;
     private JLabel courseNumberLabel;
     private JPanel timePanel;
+    // I don't think this actually gets used
     private JPanel jPanel2;
-    private JPanel jPanel3;
+    private JPanel searchButtonPanel;
     private JPanel meetingPanel;
     private JTextField profTF;
     private JButton searchButton;
@@ -74,9 +75,9 @@ public class CourseSearch extends JFrame {
     private ResultsPanel resultsPanel;
     private JPanel searchPanel;
     
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenu helpMenuItem;
+    private javax.swing.JMenu aboutMenuItem;
+    private javax.swing.JMenuBar menuBar;
     
     /**
      * Creates new form CourseSearch
@@ -89,7 +90,7 @@ public class CourseSearch extends JFrame {
         semesterLabel = new JLabel();
         semesterComboBox = new JComboBox();
         creditsLabel = new JLabel();
-        jComboBox1 = new JComboBox();
+        numCreditsComboBox = new JComboBox();
         locationLabel = new JLabel();
         locationComboBox = new JComboBox();
         meetingPanel = new JPanel();
@@ -114,14 +115,14 @@ public class CourseSearch extends JFrame {
         courseNumberLabel = new JLabel();
         courseNumberTF = new JTextField();  
         attributePanel = new JPanel();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        menuBar = new javax.swing.JMenuBar();
+        helpMenuItem = new javax.swing.JMenu();
+        aboutMenuItem = new javax.swing.JMenu();
         cbHonors = new JCheckBox();
         cbCompCultures = new JCheckBox();
         criteriaPanel = new JPanel();
         searchCriteriaLabel = new JLabel();
-        jPanel3 = new JPanel();
+        searchButtonPanel = new JPanel();
         jPanel2 = new JPanel();
         searchButton = new JButton();
         
@@ -142,13 +143,13 @@ public class CourseSearch extends JFrame {
         getContentPane().add(splitPane);
         getRootPane().setDefaultButton(searchButton);
 
-        jMenu1.setText("Help");
-        jMenuBar1.add(jMenu1);
+        helpMenuItem.setText("Help");
+        menuBar.add(helpMenuItem);
 
-        jMenu2.setText("About");
-        jMenuBar1.add(jMenu2);
+        aboutMenuItem.setText("About");
+        menuBar.add(aboutMenuItem);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(menuBar);
 
         pack();
     }
@@ -274,7 +275,7 @@ public class CourseSearch extends JFrame {
         semesterLabel.setText("Semester:");
         semesterComboBox.setModel(new DefaultComboBoxModel(new String[] {"Any", "Spring 2016", "Fall 2015"}));
         creditsLabel.setText("Credits:");
-        jComboBox1.setModel(new DefaultComboBoxModel(new String[] {"Any", "0", "1", "4", " " }));
+        numCreditsComboBox.setModel(new DefaultComboBoxModel(new String[] {"Any", "0", "1", "4", " " }));
         locationLabel.setText("Location:");
         locationComboBox.setModel(new DefaultComboBoxModel(new String[] { "Any", "Boston", "Seattle", "Charlotte", "Other locations" }));
 
@@ -324,7 +325,7 @@ public class CourseSearch extends JFrame {
         
         g.gridx = 1;
         g.gridy = 1;
-        //enclosingPanel.add(jPanel3, g);
+        //enclosingPanel.add(searchButtonPanel, g);
         
         g.gridx = 1;
         g.gridy = 1;
@@ -340,8 +341,7 @@ public class CourseSearch extends JFrame {
         searchPanel.setLayout(new GridLayout());
         GroupLayout adminPanelLayout = new GroupLayout(adminPanel);
         adminPanel.setLayout(adminPanelLayout);
-        adminPanelLayout.setHorizontalGroup(
-            adminPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        adminPanelLayout.setHorizontalGroup(adminPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(adminPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(adminPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -356,13 +356,12 @@ public class CourseSearch extends JFrame {
                             .addComponent(locationLabel))
                         .addGap(38, 38, 38)
                         .addGroup(adminPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(numCreditsComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                             .addComponent(semesterComboBox, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE)
                             .addComponent(locationComboBox, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(275, Short.MAX_VALUE))
         );
-        adminPanelLayout.setVerticalGroup(
-            adminPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        adminPanelLayout.setVerticalGroup(adminPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(adminPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(adminPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
@@ -379,7 +378,7 @@ public class CourseSearch extends JFrame {
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(adminPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(creditsLabel)
-                    .addComponent(jComboBox1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addComponent(numCreditsComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
 
@@ -544,8 +543,8 @@ public class CourseSearch extends JFrame {
                 .addContainerGap(126, Short.MAX_VALUE))
         );
 
-        GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
+        GroupLayout jPanel3Layout = new GroupLayout(searchButtonPanel);
+        searchButtonPanel.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 539, Short.MAX_VALUE)
