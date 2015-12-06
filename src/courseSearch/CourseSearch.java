@@ -9,9 +9,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -154,15 +151,6 @@ public class CourseSearch extends JFrame {
 
         setJMenuBar(menuBar);
         
-        BufferedImage image = null;
-
-        try {
-            image = ImageIO.read(getClass().getClassLoader().getResource("img/CSIcon.png"));
-        } catch (IOException e) {
-        }
-
-
-    super.setIconImage(image);
 
         pack();
     }
