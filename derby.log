@@ -1,13 +1,13 @@
 ----------------------------------------------------------------
-Thu Dec 03 23:35:16 EST 2015:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance a816c00e-0151-6b45-d23b-000005bdf248 
-on database directory /home/nathan/Documents/Northeastern/Current Semester/IS 4300/Workspace/CourseSchedulizer/codejava/ClassData with class loader sun.misc.Launcher$AppClassLoader@14dad5dc 
-Loaded from file:/home/nathan/.m2/repository/org/apache/derby/derby/10.11.1.1/derby-10.11.1.1.jar
+Sun Dec 06 11:33:52 EST 2015:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance a816c00e-0151-7824-705f-00000dfbd158 
+on database directory /Users/rhapsodious/CourseSchedulizer/codejava/ClassData with class loader sun.misc.Launcher$AppClassLoader@74a14482 
+Loaded from file:/Users/rhapsodious/.m2/repository/org/apache/derby/derby/10.11.1.1/derby-10.11.1.1.jar
 java.vendor=Oracle Corporation
-java.runtime.version=1.8.0_66-b17
-user.dir=/home/nathan/Documents/Northeastern/Current Semester/IS 4300/Workspace/CourseSchedulizer
-os.name=Linux
-os.arch=amd64
-os.version=4.2.0-18-generic
+java.runtime.version=1.8.0_65-b17
+user.dir=/Users/rhapsodious/CourseSchedulizer
+os.name=Mac OS X
+os.arch=x86_64
+os.version=10.9.5
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''

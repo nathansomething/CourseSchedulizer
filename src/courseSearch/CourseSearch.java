@@ -65,7 +65,7 @@ public class CourseSearch extends JFrame {
     private JPanel jPanel2;
     private JPanel jPanel3;
     private JPanel meetingPanel;
-    private JComboBox profComboBox;
+    private JTextField profTF;
     private JButton searchButton;
     private JComboBox semesterComboBox;
     private JComboBox locationComboBox;
@@ -84,7 +84,7 @@ public class CourseSearch extends JFrame {
     public CourseSearch() {
     	searchPanel = new JPanel();
     	adminPanel = new JPanel();
-        profComboBox = new JComboBox();
+        profTF = new JTextField();
         professorLabel = new JLabel();
         semesterLabel = new JLabel();
         semesterComboBox = new JComboBox();
@@ -270,17 +270,16 @@ public class CourseSearch extends JFrame {
         enclosingPanel.setLayout(new GridBagLayout());
     	clearButton = new javax.swing.JButton();
     	adminPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Administrative"));
-        profComboBox.setModel(new DefaultComboBoxModel(new String[] { "Any", "Item 1", "Item 2", "Item 3", "Item 4" }));
         professorLabel.setText("Professor:");
         semesterLabel.setText("Semester:");
-        semesterComboBox.setModel(new DefaultComboBoxModel(new String[] { "Spring 2016", "Fall 2015", "So on and so forth", "Item 3", "Item 4" }));
+        semesterComboBox.setModel(new DefaultComboBoxModel(new String[] {"Any", "Spring 2016", "Fall 2015"}));
         creditsLabel.setText("Credits:");
-        jComboBox1.setModel(new DefaultComboBoxModel(new String[] { "0", "1", "4", " " }));
+        jComboBox1.setModel(new DefaultComboBoxModel(new String[] {"Any", "0", "1", "4", " " }));
         locationLabel.setText("Location:");
-        locationComboBox.setModel(new DefaultComboBoxModel(new String[] { "Boston", "Seattle", "Charlotte", "Other locations" }));
+        locationComboBox.setModel(new DefaultComboBoxModel(new String[] { "Any", "Boston", "Seattle", "Charlotte", "Other locations" }));
 
-        startTimeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "12 AM", "1 AM", "2 AM", "3 AM", "4 AM", "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM ", "5 PM", "6 PM", "7 PM ", "8 PM", "9 PM", "10 PM", "11 PM" }));
-        endTimeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "12 AM", "1 AM", "2 AM", "3 AM", "4 AM", "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM ", "5 PM", "6 PM", "7 PM ", "8 PM", "9 PM", "10 PM", "11 PM" }));
+        startTimeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Any", "12 AM", "1 AM", "2 AM", "3 AM", "4 AM", "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM ", "5 PM", "6 PM", "7 PM ", "8 PM", "9 PM", "10 PM", "11 PM" }));
+        endTimeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Any", "12 AM", "1 AM", "2 AM", "3 AM", "4 AM", "5 AM", "6 AM", "7 AM", "8 AM", "9 AM", "10 AM", "11 AM", "12 PM", "1 PM", "2 PM", "3 PM", "4 PM ", "5 PM", "6 PM", "7 PM ", "8 PM", "9 PM", "10 PM", "11 PM" }));
         startTimeLabel.setText("Start at or after:");
         endTimeLabel.setText("End at or before:");
         courseNameLabel.setText("Name of Course:");
@@ -311,11 +310,11 @@ public class CourseSearch extends JFrame {
         
         g.gridx = 0;
         g.gridy = 2;
-        enclosingPanel.add(criteriaPanel, g);
+        //enclosingPanel.add(criteriaPanel, g);
         
         g.gridx = 1;
         g.gridy = 1;
-        enclosingPanel.add(attributePanel, g);
+        //enclosingPanel.add(attributePanel, g);
         
         criteriaPanel.setBorder(BorderFactory.createTitledBorder("Your Search Criteria"));
         searchCriteriaLabel.setText("Placeholder");
@@ -324,11 +323,11 @@ public class CourseSearch extends JFrame {
         clearButton.setText("Clear criteria");
         
         g.gridx = 1;
-        g.gridy = 2;
-        enclosingPanel.add(jPanel3, g);
+        g.gridy = 1;
+        //enclosingPanel.add(jPanel3, g);
         
-        g.gridx = 0;
-        g.gridy = 3;
+        g.gridx = 1;
+        g.gridy = 1;
         enclosingPanel.add(jPanel2, g);
         
         searchButton.addActionListener(new SearchButtonListener(this));
@@ -349,7 +348,7 @@ public class CourseSearch extends JFrame {
                     .addGroup(adminPanelLayout.createSequentialGroup()
                         .addComponent(professorLabel)
                         .addGap(38, 38, 38)
-                        .addComponent(profComboBox, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE))
+                        .addComponent(profTF))
                     .addGroup(adminPanelLayout.createSequentialGroup()
                         .addGroup(adminPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addComponent(semesterLabel)
@@ -367,7 +366,7 @@ public class CourseSearch extends JFrame {
             .addGroup(adminPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(adminPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(profComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profTF)
                     .addComponent(professorLabel))
                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(adminPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
