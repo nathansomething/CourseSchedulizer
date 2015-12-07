@@ -3,10 +3,10 @@ package results;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -23,10 +23,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
@@ -106,6 +104,10 @@ public class ResultsPanel extends JPanel {
 		return this;
 	}
 	
+	public JScrollPane getScrollPane() {
+		return (JScrollPane) this.getComponent(0);
+	}
+	
 	public boolean isCourseBar(JPanel panel) {
 		return panel.getName().equals("courseBar");
 	}
@@ -135,14 +137,13 @@ public class ResultsPanel extends JPanel {
 		courseNameContainer.setBorder(null);
 		courseNameContainer.setLayout(new BorderLayout(0,0));
 				
-		JTextField courseCode = new JTextField();
+		JTextArea courseCode = new JTextArea();
 		courseCode.setText(" " + searchResult.id + ": ");
 		courseCode.setFont(Fonts.LUCIDA_MEDIUM);
 		courseCode.setBackground(courseBarBackgroundColor);
 		courseCode.setForeground(Color.WHITE);
-		courseCode.setEditable(false);
-		courseCode.setBorder(null);
-		courseCode.setHorizontalAlignment(SwingUtilities.LEFT);
+		courseCode.setEditable(false);;
+		courseCode.setBorder(new EmptyBorder(9, 0, 0, 0));
 		courseNameContainer.add(courseCode, BorderLayout.WEST);
 		
 		JTextArea courseInfoLbl = new JTextArea();
@@ -173,14 +174,13 @@ public class ResultsPanel extends JPanel {
 		courseInfo.setLayout(new BorderLayout(0, 0));
 
 		
-		JTextField crnLbl = new JTextField(" CRN: " + searchResult.crn);
+		JTextArea crnLbl = new JTextArea(" CRN: " + searchResult.crn);
 		crnLbl.setEditable(false);
 		crnLbl.setForeground(new Color(0, 0, 0));
 		crnLbl.setBackground(courseInfoBackgroundColor);
 		crnLbl.setBorder(null);
 		crnLbl.setFont(Fonts.LUCIDA_SMALL);
 		crnLbl.setSelectionColor(Color.WHITE);
-		crnLbl.setHorizontalAlignment(SwingConstants.LEFT);
 		crnLbl.addMouseListener(TextHoverListener.getInstance());
 		courseInfo.add(crnLbl, BorderLayout.NORTH);
 		
@@ -197,7 +197,7 @@ public class ResultsPanel extends JPanel {
 		courseDetails.add(courseDetails2, BorderLayout.NORTH);
 		courseDetails2.setLayout(new BorderLayout(0, 0));
 
-		JTextField professorLbl = new JTextField(" Professor: " + searchResult.professor);
+		JTextArea professorLbl = new JTextArea(" Professor: " + searchResult.professor);
 		courseDetails2.add(professorLbl, BorderLayout.NORTH);
 		professorLbl.setEditable(false);
 		professorLbl.setFont(Fonts.LUCIDA_SMALL);
@@ -205,7 +205,6 @@ public class ResultsPanel extends JPanel {
 		professorLbl.setBackground(courseInfoBackgroundColor);
 		professorLbl.setBorder(null);
 		professorLbl.setSelectionColor(Color.WHITE);
-		professorLbl.setHorizontalAlignment(SwingConstants.LEFT);
 		professorLbl.addMouseListener(TextHoverListener.getInstance());
 		
 		JTextArea courseDescription = new JTextArea();
@@ -243,7 +242,7 @@ public class ResultsPanel extends JPanel {
 		courseDetails3.add(courseAttributes, BorderLayout.CENTER);
 
 		JPanel scheduleOptions = new JPanel();
-		scheduleOptions.setLayout(new GridLayout(0, 2, 10, 0));
+		scheduleOptions.setLayout(new GridLayout(0, 3, 10, 0));
 		scheduleOptions.setBackground(courseInfoBackgroundColor);
 		TitledBorder scheduleOptsBorder = new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Scheduling", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0));
 		scheduleOptsBorder.setTitleFont(Fonts.LUCIDA_MEDIUM);
@@ -275,18 +274,35 @@ public class ResultsPanel extends JPanel {
 		registerCourse.setForeground(Color.WHITE);
 		registerCourse.addMouseListener(new ButtonHover(registerCourse.getBackground(), courseBarHoverColor));
 		scheduleOptions.add(registerCourse);
-                registerCourse.addActionListener(new ActionListener() {
+		registerCourse.addActionListener(new ActionListener() {
 			@Override
-		   public void actionPerformed(ActionEvent e) {
-                      registerButton(e, searchResult);
-		   }
+			public void actionPerformed(ActionEvent e) {
+				registerButton(e, searchResult);
+			}
 		});
+		
+		JButton removeCourse = new JButton("Remove Course");
+		removeCourse.setMargin(new Insets(10, 5, 10, 5));
+		removeCourse.setFont(Fonts.LUCIDA_SMALL);
+		removeCourse.setOpaque(true);
+		removeCourse.setBorderPainted(false);
+		removeCourse.setBackground(Colors.MEDIUM_RED);
+		removeCourse.setForeground(Color.WHITE);
+		removeCourse.addMouseListener(new ButtonHover(removeCourse.getBackground(), courseBarHoverColor));
+		scheduleOptions.add(removeCourse);
+		removeCourse.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				removeButton(e, searchResult);
+			}
+		});
+		
 		
 		courseDetails3Container.add(courseDetails3, BorderLayout.CENTER);
 		courseDetails.add(courseDetails3Container, BorderLayout.SOUTH);
 		
 		for (Day day : Day.values()) {
-			JTextField dayBox = new JTextField();
+			JTextArea dayBox = new JTextArea();
 			dayBox.setText(day.toTitleCase());
 			dayBox.setForeground(Color.BLACK);
 			dayBox.setBorder(null);
@@ -306,30 +322,34 @@ public class ResultsPanel extends JPanel {
 			courseAttributes.add(honorsAttr);
 		}
 		
-//		Unused code for now; to iterate through a course's attributes.
-//		for (String attr : searchResult.getAttributes()) {
-//			JLabel courseAttribute = new JLabel(attr);
-//			courseAttributes.add(courseAttribute);
-//		}
-		
 		return courseInfo;
 	}
 	
 
     private void registerButton(java.awt.event.ActionEvent evt, Course c){
     	if (this.registeredCourses.contains(c)) {
-    		JOptionPane.showMessageDialog(this, "You've already registered for a course with CRN: " + c.crn + ".");
+    		JOptionPane.showMessageDialog(this, "You've already registered for " + c.id + " (CRN: " + c.crn + ").");
     		return;
     	}
         this.registeredCourses.add(c);
-        JOptionPane.showMessageDialog(this, "Course Successfully Registered.");
+        JOptionPane.showMessageDialog(this, c.id + " (CRN: " + c.crn + ") Successfully Registered.");
+    }
+    
+    private void removeButton(java.awt.event.ActionEvent evt, Course c){
+    	if (this.registeredCourses.contains(c)) {
+            this.registeredCourses.remove(c);
+    		JOptionPane.showMessageDialog(this, c.id + " (CRN: " + c.crn + ") was successfully removed from your schedule.");
+    		return;
+    	}
+        JOptionPane.showMessageDialog(this, c.id + " (CRN: " + c.crn + ") is not yet in your schedule.");
     }
     
     private void scheduleButton(java.awt.event.ActionEvent evt){
         String message = "Registered Courses : ";
-        for(Course c: registeredCourses){
+        for (Course c: registeredCourses){
             message = message + "\n" + c.otherToString();
         }
+        message += (registeredCourses.isEmpty()) ?  "\n----------------------------------\nNo courses added to schedule yet." : "";
         JOptionPane.showMessageDialog(this, message);
     }
 

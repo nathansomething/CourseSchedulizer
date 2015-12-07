@@ -2,7 +2,6 @@ package results;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
