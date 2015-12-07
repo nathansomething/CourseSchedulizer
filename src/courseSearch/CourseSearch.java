@@ -166,7 +166,6 @@ public class CourseSearch extends JFrame {
     
     private void setResultsPanelDimensions() {
         this.resultsPanel.setMinimumSize(new Dimension(0, 0));
-        this.resultsPanel.setPreferredSize(new Dimension(700, 800));
         this.resultsPanel.setBorder(new EmptyBorder(10, 10, 0, 0));
     }
         

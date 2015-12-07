@@ -3,6 +3,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import results.ResultsPanel;
+
 public class Course {
 
 	public String classroom;
@@ -42,25 +44,25 @@ public class Course {
 				"\nCRN: " + this.crn +
 				"\nDays: " + this.days +
 				"\nDescription: " + this.description +
-				"\nEnd Time: " + this.endTime +
+				"\nEnd Time: " + this.endTime.format(ResultsPanel.HOURS_MINS_AM_PM) +
 				"\nHonors: " + this.isHonors.toString() +
 				"\nID: " + this.id +
 				"\nLocation: " + this.location +
 				"\nName: " + this.name +
 				"\nProfessor: " + this.professor +
-				"\nStart Time: " + this.startTime +
+				"\nStart Time: " + this.startTime.format(ResultsPanel.HOURS_MINS_AM_PM) +
 				"\nTerm: " + this.term +
 				"\n----------------------------------";
 	}
                 
         public String otherToString(){
             return "----------------------------------" +
-                                "\nName: " + this.name +
+                "\nName: " + this.name +
 				"\nCRN: " + this.crn +
-                                "\nID: " + this.id +
+                "\nID: " + this.id +
 				"\nDays: " + this.days +
-				"\nStart Time: " + this.startTime +
-                                "\nEnd Time: " + this.endTime +
-                                "\nClassroom: " + this.classroom;
+				"\nStart Time: " + this.startTime.format(ResultsPanel.HOURS_MINS_AM_PM) +
+                "\nEnd Time: " + this.endTime.format(ResultsPanel.HOURS_MINS_AM_PM) +
+                "\nClassroom: " + this.classroom;
         }
 }
