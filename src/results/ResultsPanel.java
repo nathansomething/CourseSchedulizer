@@ -36,6 +36,7 @@ import util.Fonts;
 import dataRetriever.Course;
 import dataRetriever.DataRetriever;
 import dataRetriever.Day;
+import javax.swing.JOptionPane;
 
 /**
  * The class for the results panel.  Use the getResultsPanel() method to add it to a JFrame.
@@ -55,10 +56,12 @@ public class ResultsPanel extends JPanel {
 	private static Color courseBarBackgroundColor = Colors.DARK_BLUE;
 	private static Color courseInfoBackgroundColor = Colors.LIGHT_BLUE;
 	private String query;
+        private ArrayList<Course> registeredCourses;
 	
 	public ResultsPanel(String query) {
 		this.query = query;
-		
+                this.registeredCourses = new ArrayList<Course>();
+                                
 		DataRetriever dataRetriever;
 		List<Course> courses = new ArrayList<>();
 		
@@ -95,6 +98,19 @@ public class ResultsPanel extends JPanel {
 		scrollPane.setViewportView(courseList);
 	}
 
+        private void registerButton(java.awt.event.ActionEvent evt, Course c){
+            this.registeredCourses.add(c);
+            JOptionPane.showMessageDialog(this, "Course Successfully Registered");
+        }
+        
+        private void scheduleButton(java.awt.event.ActionEvent evt){
+            String message = "Registered Courses : ";
+            for(Course c: registeredCourses){
+                message = message + "\n" + c.otherToString();
+            }
+            JOptionPane.showMessageDialog(this, message);
+        }
+        
 	public ResultsPanel getResultsPanel() {
 		return this;
 	}
@@ -234,9 +250,10 @@ public class ResultsPanel extends JPanel {
 		viewCalendar.addActionListener(new ActionListener() {
 			@Override
 		   public void actionPerformed(ActionEvent e) {
-			  Schedule schedule = Schedule.getInstance();
-		      schedule.setModal(true);
-		      schedule.setVisible(true);
+                        scheduleButton(e);
+                        //Schedule schedule = Schedule.getInstance();
+                        //schedule.setModal(true);
+                        //schedule.setVisible(true);
 		   }
 		});
 		viewCalendar.addMouseListener(new ButtonHover(viewCalendar.getBackground(), courseBarHoverColor));
@@ -251,6 +268,12 @@ public class ResultsPanel extends JPanel {
 		registerCourse.setForeground(Color.WHITE);
 		registerCourse.addMouseListener(new ButtonHover(registerCourse.getBackground(), courseBarHoverColor));
 		scheduleOptions.add(registerCourse);
+                registerCourse.addActionListener(new ActionListener() {
+			@Override
+		   public void actionPerformed(ActionEvent e) {
+                      registerButton(e, searchResult);
+		   }
+		});
 		
 		for (Day day : Day.values()) {
 			JCheckBox dayBox = new JCheckBox();

@@ -52,4 +52,15 @@ public class Course {
 				"\nTerm: " + this.term +
 				"\n----------------------------------";
 	}
+                
+        public String otherToString(){
+            return "----------------------------------" +
+                                "\nName: " + this.name +
+				"\nCRN: " + this.crn +
+                                "\nID: " + this.id +
+				"\nDays: " + this.days +
+				"\nStart Time: " + this.startTime +
+                                "\nEnd Time: " + this.endTime +
+                                "\nClassroom: " + this.classroom;
+        }
 }
