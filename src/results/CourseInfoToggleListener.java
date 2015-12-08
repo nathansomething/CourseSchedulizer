@@ -9,7 +9,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 /**
  * A simple listener to expand/collapse details of a clicked search result.
@@ -49,7 +48,7 @@ public class CourseInfoToggleListener extends MouseAdapter {
 	public void mouseEntered(MouseEvent e) {
 		JPanel courseBar = (JPanel) e.getSource();
 		JPanel courseNameContainer = (JPanel) courseBar.getComponent(0);
-		JTextField courseCode = (JTextField) courseNameContainer.getComponent(0);
+		JTextArea courseCode = (JTextArea) courseNameContainer.getComponent(0);
 		JTextArea courseName = (JTextArea) courseNameContainer.getComponent(1);
 		
 		courseBar.setBackground(this.hoverColor);
@@ -63,7 +62,7 @@ public class CourseInfoToggleListener extends MouseAdapter {
 	public void mouseExited(MouseEvent e) {
 		JPanel courseBar = (JPanel) e.getSource();
 		JPanel courseNameContainer = (JPanel) courseBar.getComponent(0);
-		JTextField courseCode = (JTextField) courseNameContainer.getComponent(0);
+		JTextArea courseCode = (JTextArea) courseNameContainer.getComponent(0);
 		JTextArea courseName = (JTextArea) courseNameContainer.getComponent(1);
 		
 		courseBar.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
