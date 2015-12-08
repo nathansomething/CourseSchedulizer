@@ -47,7 +47,8 @@ public class ResultsPanel extends JPanel {
 	private static final ImageIcon COLLAPSE =  new ImageIcon(ResultsPanel.class.getResource("/img/collapse.png"));
 	private static final Image NEW_EXPAND = EXPAND.getImage().getScaledInstance(EXPAND.getIconWidth() / 2, EXPAND.getIconHeight() / 2,  java.awt.Image.SCALE_SMOOTH );
 	private static final Image NEW_COLLAPSE = COLLAPSE.getImage().getScaledInstance(COLLAPSE.getIconWidth() / 2, COLLAPSE.getIconHeight() / 2,  java.awt.Image.SCALE_SMOOTH );
-
+	private static final CourseInfoToggleListener COURSE_INFO_TOGGLE_LISTENER = new CourseInfoToggleListener(NEW_EXPAND, NEW_COLLAPSE);
+	
 	public static final DateTimeFormatter HOURS_MINS_AM_PM = DateTimeFormatter.ofPattern("h:mm a");
 	
 	private static Color courseBarHoverColor = Colors.MEDIUM_ORANGE;
@@ -57,6 +58,7 @@ public class ResultsPanel extends JPanel {
 	private static ButtonHover registerButtonHover = new ButtonHover(Colors.MEDIUM_GREEN, courseBarHoverColor);
 	private static ButtonHover removeButtonHover = new ButtonHover(Colors.MEDIUM_RED, courseBarHoverColor);
 	
+	private CourseBarHoverListener courseBarHoverListener = new CourseBarHoverListener(courseBarBackgroundColor, courseBarHoverColor);
 	private String query;
 	private List<Course> courses;
 	private List<JPanel> coursePanels;
@@ -143,33 +145,41 @@ public class ResultsPanel extends JPanel {
 		courseBar.setBackground(courseBarBackgroundColor);
 		courseBar.setLayout(new BorderLayout(0,0));
 		courseBar.setBorder(new EmptyBorder(20, 0, 20, 0));
-		courseBar.addMouseListener(new CourseInfoToggleListener(NEW_EXPAND, NEW_COLLAPSE, courseBar.getBackground(), courseBarHoverColor));
+		courseBar.addMouseListener(COURSE_INFO_TOGGLE_LISTENER);
+		courseBar.addMouseListener(courseBarHoverListener);
 
 
 		JPanel courseNameContainer = new JPanel();
+		courseNameContainer.setName("courseNameContainer");
 		courseNameContainer.setBackground(courseBarBackgroundColor);
 		courseNameContainer.setBorder(null);
 		courseNameContainer.setLayout(new BorderLayout(0,0));
 				
 		JTextArea courseCode = new JTextArea();
+		courseCode.setName("courseCode");
 		courseCode.setText(" " + searchResult.id + ": ");
 		courseCode.setFont(Fonts.LUCIDA_MEDIUM);
 		courseCode.setBackground(courseBarBackgroundColor);
 		courseCode.setForeground(Color.WHITE);
-		courseCode.setEditable(false);;
+		courseCode.setEditable(false);
 		courseCode.setBorder(new EmptyBorder(9, 0, 0, 0));
+		courseCode.addMouseListener(courseBarHoverListener);
+		courseCode.addMouseListener(COURSE_INFO_TOGGLE_LISTENER);
 		courseNameContainer.add(courseCode, BorderLayout.WEST);
 		
-		JTextArea courseInfoLbl = new JTextArea();
-		courseInfoLbl.setLineWrap(true);
-		courseInfoLbl.setText(searchResult.name);
-		courseInfoLbl.setEditable(false);
-		courseInfoLbl.setWrapStyleWord(true);
-		courseInfoLbl.setBackground(courseBarBackgroundColor);
-		courseInfoLbl.setForeground(Color.WHITE);
-		courseInfoLbl.setFont(Fonts.LUCIDA_MEDIUM);
-		courseInfoLbl.setBorder(new EmptyBorder(9, 0, 0, 0));
-		courseNameContainer.add(courseInfoLbl, BorderLayout.CENTER);
+		JTextArea courseName = new JTextArea();
+		courseName.setName("courseName");
+		courseName.setLineWrap(true);
+		courseName.setText(searchResult.name);
+		courseName.setEditable(false);
+		courseName.setWrapStyleWord(true);
+		courseName.setBackground(courseBarBackgroundColor);
+		courseName.setForeground(Color.WHITE);
+		courseName.setFont(Fonts.LUCIDA_MEDIUM);
+		courseName.setBorder(new EmptyBorder(9, 0, 0, 0));
+		courseName.addMouseListener(courseBarHoverListener);
+		courseName.addMouseListener(COURSE_INFO_TOGGLE_LISTENER);
+		courseNameContainer.add(courseName, BorderLayout.CENTER);
 		
 		JLabel courseInfoToggle = new JLabel();
 		courseInfoToggle.setIcon(new ImageIcon(NEW_EXPAND));
