@@ -170,60 +170,82 @@ public class CourseSearch extends JFrame {
     }
         
     public void runSearch() {
-    	String queryString = "WHERE ";
+    	String queryString = "";
     	
-    	//Get Time
-    	String[] startTimeStr = startTimeComboBox.getSelectedItem().toString().split(" ");
-    	Integer timeNum = Integer.parseInt(startTimeStr[0]);
-    	if (timeNum.equals(12)) {
-    		timeNum = 0;
+    	String[] startTimeStr;
+    	Integer timeNum;
+    	Boolean isPm;
+    	
+    	if (!startTimeComboBox.getSelectedItem().toString().equals("Any")) {
+    		//Get Time
+        	startTimeStr = startTimeComboBox.getSelectedItem().toString().split(" ");
+        	timeNum = Integer.parseInt(startTimeStr[0]);
+        	if (timeNum.equals(12)) {
+        		timeNum = 0;
+        	}
+        	isPm = startTimeStr[1].equals("PM");
+        	if (isPm) {
+        		timeNum += 12;
+        	}
+        	queryString += "starttimeHour >= " + timeNum + " AND ";
     	}
-    	Boolean isPm = startTimeStr[1].equals("PM");
-    	if (isPm) {
-    		timeNum += 12;
+    	if (!endTimeComboBox.getSelectedItem().toString().equals("Any")) {
+    		//Get Time
+	    	startTimeStr = endTimeComboBox.getSelectedItem().toString().split(" ");
+	    	timeNum = Integer.parseInt(startTimeStr[0]);
+	    	isPm = startTimeStr[1].equals("PM");
+	    	if (isPm) {
+	    		timeNum += 12;
+	    	}
+	    	queryString += " endtimeHour <= " + timeNum + " AND ";
     	}
-    	queryString += "starttimeHour >= " + timeNum;
-    	startTimeStr = endTimeComboBox.getSelectedItem().toString().split(" ");
-    	timeNum = Integer.parseInt(startTimeStr[0]);
-    	isPm = startTimeStr[1].equals("PM");
-    	if (isPm) {
-    		timeNum += 12;
+    	/*if (!semesterComboBox.getSelectedItem().toString().equals("Any")) {
+    		queryString += " AND lower(semester) = \'" + semesterComboBox.getSelectedItem().toString().toLowerCase() + "\'";
+    	}*/
+    	if (!locationComboBox.getSelectedItem().toString().equals("Any")) {
+    		queryString += " lower(location) = \'" + locationComboBox.getSelectedItem().toString().toLowerCase() + "\'" + " AND ";
     	}
-    	queryString += " AND endtimeHour <= " + timeNum;
+    	if (!numCreditsComboBox.getSelectedItem().toString().equals("Any")) {
+    		queryString += " credits = \'" + Integer.parseInt(locationComboBox.getSelectedItem().toString()) + "\'" + " AND ";
+    	}
+    	if (!profTF.getText().equals("")) {
+    		queryString += " lower(professor) LIKE \'%" + profTF.getText().toLowerCase() + "%\' " + " AND ";
+    	}
     	if (!courseNameTF.getText().equals("")) {
-    		queryString += " AND lower(name) LIKE \'%" + courseNameTF.getText().toLowerCase() + "%\' " ;
+    		queryString += " lower(name) LIKE \'%" + courseNameTF.getText().toLowerCase() + "%\' " + " AND ";
     	}
     	if (!CRNTF.getText().equals("")) {
-    		queryString += " AND crn = \'" + CRNTF.getText() + "\'";
+    		queryString += " crn = \'" + CRNTF.getText() + "\'" + " AND ";
     	}
     	if (!courseNumberTF.getText().equals("")) {
-    		queryString += " AND id LIKE \'%" + courseNumberTF.getText() + "%\'";
+    		queryString += " id LIKE \'%" + courseNumberTF.getText() + "%\'" + " AND ";
     	}
     	if (cbMon.isSelected()) {
-    		queryString += " AND monday = true";
+    		queryString += "monday = true AND ";
     	}
     	if (cbMon.isSelected()) {
-    		queryString += " AND monday = true";
+    		queryString += "monday = true AND ";
     	}
     	if (cbTue.isSelected()) {
-    		queryString += " AND tuesday = true";
+    		queryString += "tuesday = true AND ";
     	}
     	if (cbWed.isSelected()) {
-    		queryString += " AND wednesday = true";
+    		queryString += "wednesday = true AND ";
     	}
     	if (cbThu.isSelected()) {
-    		queryString += " AND thursday = true";
+    		queryString += "thursday = true AND ";
     	}
     	if (cbFri.isSelected()) {
-    		queryString += " AND friday = true";
+    		queryString += "friday = true AND ";
     	}
     	if (cbSat.isSelected()) {
-    		queryString += " AND saturday = true";
+    		queryString += "saturday = true AND ";
     	}
-    	if (!locationComboBox.getSelectedItem().toString().equals("")) {
-    		queryString += " AND location = \'" + locationComboBox.getSelectedItem().toString() + "\'";
+    	
+    	if (!queryString.equals("")) {
+    		queryString = " WHERE " + queryString;
+    		queryString = queryString.substring(0, queryString.length() - 5);
     	}
-
     	this.splitPane.remove(resultsPanel);
     	this.resultsPanel = new ResultsPanel(queryString);
     	this.setResultsPanelDimensions();
