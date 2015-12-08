@@ -275,7 +275,7 @@ public class ResultsPanel extends JPanel {
 		viewSchedule.addActionListener(new ActionListener() {
 			@Override
 		   public void actionPerformed(ActionEvent e) {
-				scheduleButton(e);
+				scheduleButton(e, searchResult);
 		   }
 		});
 		viewSchedule.addMouseListener(scheduleButtonHover);
@@ -363,11 +363,12 @@ public class ResultsPanel extends JPanel {
     
     private void indicateConflictingCoursesWithCourse(Course c, List<Course> results, List<JPanel> panels) {
     	for (Course res : results) {
-	    	if (res.conflictsWithOtherCourse(c)) {
+	    	if (res.conflictsWithOtherCourse(c) && !res.equals(c)) {
 	    		JButton button = this.getRegisterButton(panels.get(results.indexOf(res)));
 	    		button.setEnabled(false);
 	    		button.setBackground(Color.WHITE);
 	    		button.removeMouseListener(registerButtonHover);
+	    		button.setText("Scheduling Conflict");
 	    	}
     	}
     }
@@ -380,7 +381,7 @@ public class ResultsPanel extends JPanel {
     
     private void resetConflictedCoursesWithCourse(Course c, List<Course> results, List<JPanel> panels) {
     	for (Course res : results) {
-	    	if (res.conflictsWithOtherCourse(c)) {
+	    	if (res.conflictsWithOtherCourse(c) || res.equals(c)) {
 	    		JButton button = this.getRegisterButton(panels.get(results.indexOf(res)));
 	    		button.setEnabled(true);
 	    		button.setBackground(Colors.MEDIUM_GREEN);
@@ -421,12 +422,15 @@ public class ResultsPanel extends JPanel {
         JOptionPane.showMessageDialog(this, c.id + " (CRN: " + c.crn + ") is not yet in your schedule.");
     }
     
-    private void scheduleButton(java.awt.event.ActionEvent evt){
+    private void scheduleButton(java.awt.event.ActionEvent evt, Course currentCourse){
         String message = "Registered Courses : ";
         for (Course c: CourseSearch.registeredCourses){
             message = message + "\n" + c.otherToString();
         }
         message += (CourseSearch.registeredCourses.isEmpty()) ?  "\n----------------------------------\nNo courses added to schedule yet." : "";
+        boolean isRegistered = CourseSearch.registeredCourses.contains(currentCourse);
+        String tentativeCourse = isRegistered ? "----------------------------------\nThis course is already registered." : currentCourse.otherToString();
+        message += "\n\nTentative Course: \n" + tentativeCourse;
         JOptionPane.showMessageDialog(this, message);
     }
 
