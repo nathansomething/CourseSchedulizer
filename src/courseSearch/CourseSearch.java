@@ -211,6 +211,9 @@ public class CourseSearch extends JFrame {
     	if (!courseNameTF.getText().equals("")) {
     		queryString += " lower(name) LIKE \'%" + courseNameTF.getText().toLowerCase() + "%\' " + " AND ";
     	}
+    	if (!departmentTF.getText().equals("")) {
+    		queryString += " lower(name) LIKE \'%" + departmentTF.getText().toLowerCase() + "%\' " + " AND ";
+    	}
     	if (!CRNTF.getText().equals("")) {
     		queryString += " crn = \'" + CRNTF.getText() + "\'" + " AND ";
     	}
