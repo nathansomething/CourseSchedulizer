@@ -252,31 +252,12 @@ public class CourseSearch extends JFrame {
     	}
     	this.splitPane.remove(resultsPanel);
     	this.resultsPanel = new ResultsPanel(queryString);
+    	this.resultsPanel.indicateConflictingCoursesWithSchedule(this.resultsPanel.getSearchResults(), this.resultsPanel.getCoursePanels());
+    	this.resultsPanel.indicateRegisteredCourses(this.resultsPanel.getSearchResults(), this.resultsPanel.getCoursePanels());
     	this.setResultsPanelDimensions();
     	this.splitPane.add(resultsPanel);
         this.setSplitPaneOptions();
     }
-    
-//    private void setCourseSearchBindings(JComponent parent) {
-//    	for (Component component : parent.getComponents()) {
-//    		if (component instanceof JComponent) {
-//	    		JComponent child = (JComponent) component;
-//	    		if (child.getComponents().length > 0) {
-//	    			child.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "pressed");
-//	    			child.getActionMap().put("pressed", new SearchAction(this));
-//	    			this.setCourseSearchBindings(child);
-//	    			return;
-//	    		}
-//	    		else if (child instanceof JComboBox) {
-//	    			JComboBox childCB = (JComboBox) child;
-//    			}
-//    			else { 
-//    				child.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "pressed");
-//	    		}
-//    	        child.getActionMap().put("pressed", new SearchAction(this));
-//    		}
-//    	}
-//    }
 
     private void setWindowProperties() {
     	setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);

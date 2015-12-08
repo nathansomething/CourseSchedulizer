@@ -54,15 +54,51 @@ public class Course {
 				"\nTerm: " + this.term +
 				"\n----------------------------------";
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o == null) {
+			return false;
+		}
+		else if (!(o instanceof Course)) {
+			return false;
+		}
+		Course temp = (Course) o;
+		return this.crn.equals(temp.crn);
+ 	}
+	
+	@Override
+	public int hashCode() {
+		return Integer.parseInt(this.crn);
+	}
                 
-        public String otherToString(){
-            return "----------------------------------" +
-                "\nName: " + this.name +
-				"\nCRN: " + this.crn +
-                "\nID: " + this.id +
-				"\nDays: " + this.days +
-				"\nStart Time: " + this.startTime.format(ResultsPanel.HOURS_MINS_AM_PM) +
-                "\nEnd Time: " + this.endTime.format(ResultsPanel.HOURS_MINS_AM_PM) +
-                "\nClassroom: " + this.classroom;
-        }
+    public String otherToString(){
+        return "----------------------------------" +
+            "\nName: " + this.name +
+			"\nCRN: " + this.crn +
+            "\nID: " + this.id +
+			"\nDays: " + this.days +
+			"\nStart Time: " + this.startTime.format(ResultsPanel.HOURS_MINS_AM_PM) +
+            "\nEnd Time: " + this.endTime.format(ResultsPanel.HOURS_MINS_AM_PM) +
+            "\nClassroom: " + this.classroom;
+    }
+    
+    public boolean conflictsWithOtherCourse(Course c) {
+    	return (this.conflictsWithOtherCourseDay(c) || c.conflictsWithOtherCourseDay(this)) &&
+    			(this.conflictsWithOtherCourseTime(c) || c.conflictsWithOtherCourseTime(this));
+    }
+    
+    private boolean conflictsWithOtherCourseTime(Course c) {
+    	return ((this.startTime.toSecondOfDay() <= c.startTime.toSecondOfDay()) && (c.startTime.toSecondOfDay() <= this.endTime.toSecondOfDay())) ||
+    			((this.startTime.toSecondOfDay() <= c.startTime.toSecondOfDay()) && (c.endTime.toSecondOfDay() <= this.endTime.toSecondOfDay()));
+    }
+    
+    private boolean conflictsWithOtherCourseDay(Course c) {
+    	for (Day day : this.days) {
+    		if (c.days.contains(day)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
 }

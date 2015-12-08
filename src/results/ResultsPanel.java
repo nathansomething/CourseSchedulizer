@@ -53,18 +53,24 @@ public class ResultsPanel extends JPanel {
 	private static Color courseBarHoverColor = Colors.MEDIUM_ORANGE;
 	private static Color courseBarBackgroundColor = Colors.DARK_BLUE;
 	private static Color courseInfoBackgroundColor = Colors.LIGHT_BLUE;
+	private static ButtonHover scheduleButtonHover = new ButtonHover(Colors.MEDIUM_YELLOW, courseBarHoverColor);
+	private static ButtonHover registerButtonHover = new ButtonHover(Colors.MEDIUM_GREEN, courseBarHoverColor);
+	private static ButtonHover removeButtonHover = new ButtonHover(Colors.MEDIUM_RED, courseBarHoverColor);
+	
 	private String query;
-        private ArrayList<Course> registeredCourses;
+	private List<Course> courses;
+	private List<JPanel> coursePanels;
 	
 	public ResultsPanel(String query) {
 		this.query = query;
                                 
 		DataRetriever dataRetriever;
-		List<Course> courses = new ArrayList<>();
+		this.courses = new ArrayList<>();
+		this.coursePanels = new ArrayList<>();
 		
 		try {
 			dataRetriever = new DataRetriever();
-			courses = dataRetriever.getData(this.query);
+			this.courses = dataRetriever.getData(this.query);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -90,6 +96,7 @@ public class ResultsPanel extends JPanel {
 		
 		for (Course course : courses) {
 			JPanel coursePanel = this.createCoursePanel(course);
+			this.coursePanels.add(coursePanel);
 			coursesBox.add(coursePanel);
 			coursesBox.add(Box.createRigidArea(new Dimension(0, 10)));
 		}
@@ -101,6 +108,14 @@ public class ResultsPanel extends JPanel {
         
 	public ResultsPanel getResultsPanel() {
 		return this;
+	}
+	
+	public List<Course> getSearchResults() {
+		return this.courses;
+	}
+	
+	public List<JPanel> getCoursePanels() {
+		return this.coursePanels;
 	}
 	
 	public JScrollPane getScrollPane() {
@@ -166,6 +181,8 @@ public class ResultsPanel extends JPanel {
 	}
 	
 	private JPanel createCourseInfo(Course searchResult) {
+		List<Course> results = this.courses;
+		List<JPanel> coursePanels = this.coursePanels;
 		JPanel courseInfo = new JPanel();
 		courseInfo.setName("courseInfo");
 		courseInfo.setVisible(false);
@@ -261,7 +278,7 @@ public class ResultsPanel extends JPanel {
 				scheduleButton(e);
 		   }
 		});
-		viewSchedule.addMouseListener(new ButtonHover(viewSchedule.getBackground(), courseBarHoverColor));
+		viewSchedule.addMouseListener(scheduleButtonHover);
 		scheduleOptions.add(viewSchedule);
 
 		JButton registerCourse = new JButton("Register For Course");
@@ -271,12 +288,12 @@ public class ResultsPanel extends JPanel {
 		registerCourse.setBorderPainted(false);
 		registerCourse.setBackground(Colors.MEDIUM_GREEN);
 		registerCourse.setForeground(Color.WHITE);
-		registerCourse.addMouseListener(new ButtonHover(registerCourse.getBackground(), courseBarHoverColor));
+		registerCourse.addMouseListener(registerButtonHover);
 		scheduleOptions.add(registerCourse);
 		registerCourse.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				registerButton(e, searchResult);
+				registerButton(e, searchResult, results, coursePanels);
 			}
 		});
 		
@@ -287,12 +304,12 @@ public class ResultsPanel extends JPanel {
 		removeCourse.setBorderPainted(false);
 		removeCourse.setBackground(Colors.MEDIUM_RED);
 		removeCourse.setForeground(Color.WHITE);
-		removeCourse.addMouseListener(new ButtonHover(removeCourse.getBackground(), courseBarHoverColor));
+		removeCourse.addMouseListener(removeButtonHover);
 		scheduleOptions.add(removeCourse);
 		removeCourse.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				removeButton(e, searchResult);
+				removeButton(e, searchResult, results, coursePanels);
 			}
 		});
 		
@@ -325,18 +342,79 @@ public class ResultsPanel extends JPanel {
 	}
 	
 
-    private void registerButton(java.awt.event.ActionEvent evt, Course c){
+    private void registerButton(java.awt.event.ActionEvent evt, Course c, List<Course> results, List<JPanel> panels) {
     	if (CourseSearch.registeredCourses.contains(c)) {
     		JOptionPane.showMessageDialog(this, "You've already registered for " + c.id + " (CRN: " + c.crn + ").");
     		return;
     	}
         CourseSearch.registeredCourses.add(c);
+        JButton registerButton = (JButton) evt.getSource();
+        registerButton.setText("Registered");
+        
+        this.indicateConflictingCoursesWithCourse(c, results, panels);
         JOptionPane.showMessageDialog(this, c.id + " (CRN: " + c.crn + ") Successfully Registered.");
     }
     
-    private void removeButton(java.awt.event.ActionEvent evt, Course c){
+    public void indicateConflictingCoursesWithSchedule(List<Course> results, List<JPanel> panels) {
+    	for (Course c : CourseSearch.registeredCourses) {
+        	this.indicateConflictingCoursesWithCourse(c, results, panels);
+    	}
+    }
+    
+    private void indicateConflictingCoursesWithCourse(Course c, List<Course> results, List<JPanel> panels) {
+    	for (Course res : results) {
+	    	if (res.conflictsWithOtherCourse(c)) {
+	    		JButton button = this.getRegisterButton(panels.get(results.indexOf(res)));
+	    		button.setEnabled(false);
+	    		button.setBackground(Color.WHITE);
+	    		button.removeMouseListener(registerButtonHover);
+	    	}
+    	}
+    }
+    
+    public void resetConflictedCoursesWithSchedule(List<Course> results, List<JPanel> panels) {
+    	for (Course c : CourseSearch.registeredCourses) {
+        	this.resetConflictedCoursesWithCourse(c, results, panels);
+    	}
+    }
+    
+    private void resetConflictedCoursesWithCourse(Course c, List<Course> results, List<JPanel> panels) {
+    	for (Course res : results) {
+	    	if (res.conflictsWithOtherCourse(c)) {
+	    		JButton button = this.getRegisterButton(panels.get(results.indexOf(res)));
+	    		button.setEnabled(true);
+	    		button.setBackground(Colors.MEDIUM_GREEN);
+	    		button.addMouseListener(registerButtonHover);
+	    		button.setText("Register for Course");
+	    	}
+    	}
+    }
+    
+    public void indicateRegisteredCourses(List<Course> results, List<JPanel> panels) {
+    	for (Course c : CourseSearch.registeredCourses) {
+    		if (results.contains(c)) {
+    			JButton registerButton = this.getRegisterButton(panels.get(results.indexOf(c)));
+    			registerButton.setText("Registered");
+    		}
+    	}
+    }
+    
+    private JPanel getScheduleOptionsPanel(JPanel coursePanel) {
+    	JPanel courseInfo = (JPanel) coursePanel.getComponent(1);
+    	JPanel courseDetails = (JPanel) courseInfo.getComponent(1);
+    	JPanel courseDetails3Container = (JPanel) courseDetails.getComponent(2);
+    	JPanel courseDetails3 = (JPanel) courseDetails3Container.getComponent(0);
+    	return (JPanel) courseDetails3.getComponent(1);
+    }
+    
+    private JButton getRegisterButton(JPanel coursePanel) {
+    	return (JButton) this.getScheduleOptionsPanel(coursePanel).getComponent(1);
+    }
+    
+    private void removeButton(java.awt.event.ActionEvent evt, Course c, List<Course> results, List<JPanel> panels){
     	if (CourseSearch.registeredCourses.contains(c)) {
             CourseSearch.registeredCourses.remove(c);
+            this.resetConflictedCoursesWithCourse(c, results, panels);
     		JOptionPane.showMessageDialog(this, c.id + " (CRN: " + c.crn + ") was successfully removed from your schedule.");
     		return;
     	}
