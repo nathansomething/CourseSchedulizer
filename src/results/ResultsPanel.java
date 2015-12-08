@@ -30,6 +30,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+import courseSearch.CourseSearch;
 import util.Colors;
 import util.Fonts;
 import dataRetriever.Course;
@@ -57,7 +58,6 @@ public class ResultsPanel extends JPanel {
 	
 	public ResultsPanel(String query) {
 		this.query = query;
-        this.registeredCourses = new ArrayList<Course>();
                                 
 		DataRetriever dataRetriever;
 		List<Course> courses = new ArrayList<>();
@@ -326,17 +326,17 @@ public class ResultsPanel extends JPanel {
 	
 
     private void registerButton(java.awt.event.ActionEvent evt, Course c){
-    	if (this.registeredCourses.contains(c)) {
+    	if (CourseSearch.registeredCourses.contains(c)) {
     		JOptionPane.showMessageDialog(this, "You've already registered for " + c.id + " (CRN: " + c.crn + ").");
     		return;
     	}
-        this.registeredCourses.add(c);
+        CourseSearch.registeredCourses.add(c);
         JOptionPane.showMessageDialog(this, c.id + " (CRN: " + c.crn + ") Successfully Registered.");
     }
     
     private void removeButton(java.awt.event.ActionEvent evt, Course c){
-    	if (this.registeredCourses.contains(c)) {
-            this.registeredCourses.remove(c);
+    	if (CourseSearch.registeredCourses.contains(c)) {
+            CourseSearch.registeredCourses.remove(c);
     		JOptionPane.showMessageDialog(this, c.id + " (CRN: " + c.crn + ") was successfully removed from your schedule.");
     		return;
     	}
@@ -345,10 +345,10 @@ public class ResultsPanel extends JPanel {
     
     private void scheduleButton(java.awt.event.ActionEvent evt){
         String message = "Registered Courses : ";
-        for (Course c: registeredCourses){
+        for (Course c: CourseSearch.registeredCourses){
             message = message + "\n" + c.otherToString();
         }
-        message += (registeredCourses.isEmpty()) ?  "\n----------------------------------\nNo courses added to schedule yet." : "";
+        message += (CourseSearch.registeredCourses.isEmpty()) ?  "\n----------------------------------\nNo courses added to schedule yet." : "";
         JOptionPane.showMessageDialog(this, message);
     }
 

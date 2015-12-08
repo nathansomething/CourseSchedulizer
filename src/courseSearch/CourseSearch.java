@@ -6,6 +6,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -25,9 +27,11 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import results.ResultsPanel;
+import dataRetriever.Course;
 
 public class CourseSearch extends JFrame {
 	public static final int SCREEN_WIDTH = (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getWidth());
+	public static Set<Course> registeredCourses;
 	public JTextField CRNTF;
     public JTextField courseNumberTF;
     public JPanel adminPanel;
@@ -80,6 +84,7 @@ public class CourseSearch extends JFrame {
      * Creates new form CourseSearch
      */
     public CourseSearch() {
+    	registeredCourses = new HashSet<>();
     	searchPanel = new JPanel();
     	adminPanel = new JPanel();
         profTF = new JTextField();
