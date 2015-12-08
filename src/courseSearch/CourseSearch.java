@@ -27,54 +27,54 @@ import javax.swing.border.EmptyBorder;
 import results.ResultsPanel;
 
 public class CourseSearch extends JFrame {
-	private static final int SCREEN_WIDTH = (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getWidth());
-	private JTextField CRNTF;
-    private JTextField courseNumberTF;
-    private JPanel adminPanel;
-    private JPanel attributePanel;
-    private JCheckBox cbFri;
-    private JCheckBox cbHonors;
-    private JCheckBox cbCompCultures;
-    private JCheckBox cbMon;
-    private JCheckBox cbThu;
-    private JCheckBox cbTue;
-    private JCheckBox cbWed;
-    private JCheckBox cbSat;
-    private JButton clearButton;
-    private JTextField courseNameTF;
-    private JPanel coursePanel;
-    private JPanel criteriaPanel;
-    private JTextField departmentTF;
-    private JComboBox endTimeComboBox;
-    private JComboBox numCreditsComboBox;
-    private JLabel startTimeLabel;
-    private JLabel searchCriteriaLabel;
-    private JLabel creditsLabel;
-    private JLabel locationLabel;
-    private JLabel endTimeLabel;
-    private JLabel courseNameLabel;
-    private JLabel crnLabel;
-    private JLabel departmentLabel;
-    private JLabel professorLabel;
-    private JLabel semesterLabel;
-    private JLabel courseNumberLabel;
-    private JPanel timePanel;
+	public static final int SCREEN_WIDTH = (int) Math.round(Toolkit.getDefaultToolkit().getScreenSize().getWidth());
+	public JTextField CRNTF;
+    public JTextField courseNumberTF;
+    public JPanel adminPanel;
+    public JPanel attributePanel;
+    public JCheckBox cbFri;
+    public JCheckBox cbHonors;
+    public JCheckBox cbCompCultures;
+    public JCheckBox cbMon;
+    public JCheckBox cbThu;
+    public JCheckBox cbTue;
+    public JCheckBox cbWed;
+    public JCheckBox cbSat;
+    public JButton clearButton;
+    public JTextField courseNameTF;
+    public JPanel coursePanel;
+    public JPanel criteriaPanel;
+    public JTextField departmentTF;
+    public JComboBox endTimeComboBox;
+    public JComboBox numCreditsComboBox;
+    public JLabel startTimeLabel;
+    public JLabel searchCriteriaLabel;
+    public JLabel creditsLabel;
+    public JLabel locationLabel;
+    public JLabel endTimeLabel;
+    public JLabel courseNameLabel;
+    public JLabel crnLabel;
+    public JLabel departmentLabel;
+    public JLabel professorLabel;
+    public JLabel semesterLabel;
+    public JLabel courseNumberLabel;
+    public JPanel timePanel;
     // I don't think this actually gets used
-    private JPanel jPanel2;
-    private JPanel searchButtonPanel;
-    private JPanel meetingPanel;
-    private JTextField profTF;
-    private JButton searchButton;
-    private JComboBox semesterComboBox;
-    private JComboBox locationComboBox;
-    private JComboBox startTimeComboBox;
-    private JSplitPane splitPane;
-    private ResultsPanel resultsPanel;
-    private JPanel searchPanel;
+    public JPanel jPanel2;
+    public JPanel searchButtonPanel;
+    public JPanel meetingPanel;
+    public JTextField profTF;
+    public JButton searchButton;
+    public JComboBox semesterComboBox;
+    public JComboBox locationComboBox;
+    public JComboBox startTimeComboBox;
+    public JSplitPane splitPane;
+    public ResultsPanel resultsPanel;
+    public JPanel searchPanel;
     
-    private javax.swing.JMenu helpMenuItem;
-    private javax.swing.JMenu aboutMenuItem;
-    private javax.swing.JMenuBar menuBar;
+    public javax.swing.JMenu helpMenuItem;
+    public javax.swing.JMenu aboutMenuItem;
+    public javax.swing.JMenuBar menuBar;
     
     /**
      * Creates new form CourseSearch
@@ -147,7 +147,6 @@ public class CourseSearch extends JFrame {
         menuBar.add(aboutMenuItem);
 
         setJMenuBar(menuBar);
-        
 
         pack();
     }
@@ -343,7 +342,8 @@ public class CourseSearch extends JFrame {
         searchCriteriaLabel.setText("Placeholder");
         
         searchButton.setText("Search!");
-        clearButton.setText("Clear criteria");
+        clearButton.setText("Clear Criteria");
+        clearButton.addActionListener(new ClearCriteriaListener(this));
         
         g.gridx = 1;
         g.gridy = 1;

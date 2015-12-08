@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -58,7 +57,7 @@ public class ResultsPanel extends JPanel {
 	
 	public ResultsPanel(String query) {
 		this.query = query;
-                this.registeredCourses = new ArrayList<Course>();
+        this.registeredCourses = new ArrayList<Course>();
                                 
 		DataRetriever dataRetriever;
 		List<Course> courses = new ArrayList<>();
