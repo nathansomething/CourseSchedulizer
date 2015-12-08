@@ -202,9 +202,9 @@ public class CourseSearch extends JFrame {
     	if (!locationComboBox.getSelectedItem().toString().equals("Any")) {
     		queryString += " lower(location) = \'" + locationComboBox.getSelectedItem().toString().toLowerCase() + "\'" + " AND ";
     	}
-    	if (!numCreditsComboBox.getSelectedItem().toString().equals("Any")) {
-    		queryString += " credits = \'" + Integer.parseInt(locationComboBox.getSelectedItem().toString()) + "\'" + " AND ";
-    	}
+    	//if (!numCreditsComboBox.getSelectedItem().toString().equals("Any")) {
+    	//	queryString += " credits = \'" + Integer.parseInt(numCreditsComboBox.getSelectedItem().toString()) + "\'" + " AND ";
+    	//}
     	if (!profTF.getText().equals("")) {
     		queryString += " lower(professor) LIKE \'%" + profTF.getText().toLowerCase() + "%\' " + " AND ";
     	}
