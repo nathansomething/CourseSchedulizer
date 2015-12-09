@@ -1,5 +1,6 @@
 package dataRetriever;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class Course {
 	public String semester;
 	public LocalTime startTime;
 	public String title;
+	public static final DateTimeFormatter HOURS_MINS_AM_PM = DateTimeFormatter.ofPattern("h:mm a");
 	
 	Course() {
 		this.classroom = "";
@@ -82,8 +84,8 @@ public class Course {
 			"\nCRN: " + this.crn +
             "\nID: " + this.courseNum +
 			"\nDays: " + this.days +
-			"\nStart Time: " + this.startTime +
-            "\nEnd Time: " + this.endTime +
+			"\nStart Time: " + this.startTime.format(HOURS_MINS_AM_PM) +
+            "\nEnd Time: " + this.endTime.format(HOURS_MINS_AM_PM) +
             "\nClassroom: " + this.classroom;
     }
     
