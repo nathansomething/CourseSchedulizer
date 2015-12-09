@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -173,32 +174,19 @@ public class CourseSearch extends JFrame {
     public void runSearch() {
     	String queryString = "";
     	
-    	String[] startTimeStr;
+    	String timeStr;
     	Integer timeNum;
     	Boolean isPm;
     	
     	if (!startTimeComboBox.getSelectedItem().toString().equals("Any")) {
     		//Get Time
-        	startTimeStr = startTimeComboBox.getSelectedItem().toString().split(" ");
-        	timeNum = Integer.parseInt(startTimeStr[0]);
-        	if (timeNum.equals(12)) {
-        		timeNum = 0;
-        	}
-        	isPm = startTimeStr[1].equals("PM");
-        	if (isPm) {
-        		timeNum += 12;
-        	}
-        	queryString += "starttimeHour >= " + timeNum + " AND ";
+    		timeStr = startTimeComboBox.getSelectedItem().toString();
+        	queryString += "starttime >= \'" + timeStr + "\' AND ";
     	}
     	if (!endTimeComboBox.getSelectedItem().toString().equals("Any")) {
     		//Get Time
-	    	startTimeStr = endTimeComboBox.getSelectedItem().toString().split(" ");
-	    	timeNum = Integer.parseInt(startTimeStr[0]);
-	    	isPm = startTimeStr[1].equals("PM");
-	    	if (isPm) {
-	    		timeNum += 12;
-	    	}
-	    	queryString += " endtimeHour <= " + timeNum + " AND ";
+    		timeStr = endTimeComboBox.getSelectedItem().toString();
+	    	queryString += " endtime <= \'" + timeStr + "\' AND ";
     	}
     	/*if (!semesterComboBox.getSelectedItem().toString().equals("Any")) {
     		queryString += " AND lower(semester) = \'" + semesterComboBox.getSelectedItem().toString().toLowerCase() + "\'";
@@ -206,26 +194,23 @@ public class CourseSearch extends JFrame {
     	if (!locationComboBox.getSelectedItem().toString().equals("Any")) {
     		queryString += " lower(location) = \'" + locationComboBox.getSelectedItem().toString().toLowerCase() + "\'" + " AND ";
     	}
-    	//if (!numCreditsComboBox.getSelectedItem().toString().equals("Any")) {
-    	//	queryString += " credits = \'" + Integer.parseInt(numCreditsComboBox.getSelectedItem().toString()) + "\'" + " AND ";
-    	//}
+    	if (!numCreditsComboBox.getSelectedItem().toString().equals("Any")) {
+    		queryString += " credits = " + Integer.parseInt(numCreditsComboBox.getSelectedItem().toString()) + "" + " AND ";
+    	}
     	if (!profTF.getText().equals("")) {
     		queryString += " lower(professor) LIKE \'%" + profTF.getText().toLowerCase() + "%\' " + " AND ";
     	}
     	if (!courseNameTF.getText().equals("")) {
-    		queryString += " lower(name) LIKE \'%" + courseNameTF.getText().toLowerCase() + "%\' " + " AND ";
+    		queryString += " lower(title) LIKE \'%" + courseNameTF.getText().toLowerCase() + "%\' " + " AND ";
     	}
     	if (!departmentTF.getText().equals("")) {
-    		queryString += " lower(name) LIKE \'%" + departmentTF.getText().toLowerCase() + "%\' " + " AND ";
+    		queryString += " lower(depHeader) LIKE \'%" + departmentTF.getText().toLowerCase() + "%\' " + " AND ";
     	}
     	if (!CRNTF.getText().equals("")) {
     		queryString += " crn = \'" + CRNTF.getText() + "\'" + " AND ";
     	}
     	if (!courseNumberTF.getText().equals("")) {
-    		queryString += " id LIKE \'%" + courseNumberTF.getText() + "%\'" + " AND ";
-    	}
-    	if (cbMon.isSelected()) {
-    		queryString += "monday = true AND ";
+    		queryString += " courseNum LIKE \'%" + courseNumberTF.getText() + "%\'" + " AND ";
     	}
     	if (cbMon.isSelected()) {
     		queryString += "monday = true AND ";

@@ -130,7 +130,7 @@ public class ResultsPanel extends JPanel {
 	
 	private JPanel createCoursePanel(Course searchResult) {
 		JPanel course = new JPanel();
-		course.setName("course: " + searchResult.id);
+		course.setName("course: " + searchResult.courseNum);
 		course.setBorder(new LineBorder(Color.black));
 		course.setLayout(new BorderLayout(0, 0));
 		course.add(this.createCourseBar(searchResult), BorderLayout.NORTH);
@@ -157,7 +157,7 @@ public class ResultsPanel extends JPanel {
 				
 		JTextArea courseCode = new JTextArea();
 		courseCode.setName("courseCode");
-		courseCode.setText(" " + searchResult.id + ": ");
+		courseCode.setText(" " + searchResult.depHeader + " " + searchResult.courseNum + ": ");
 		courseCode.setFont(Fonts.LUCIDA_MEDIUM);
 		courseCode.setBackground(courseBarBackgroundColor);
 		courseCode.setForeground(Color.WHITE);
@@ -170,7 +170,7 @@ public class ResultsPanel extends JPanel {
 		JTextArea courseName = new JTextArea();
 		courseName.setName("courseName");
 		courseName.setLineWrap(true);
-		courseName.setText(searchResult.name);
+		courseName.setText(searchResult.title);
 		courseName.setEditable(false);
 		courseName.setWrapStyleWord(true);
 		courseName.setBackground(courseBarBackgroundColor);
@@ -183,7 +183,7 @@ public class ResultsPanel extends JPanel {
 		
 		JLabel courseInfoToggle = new JLabel();
 		courseInfoToggle.setIcon(new ImageIcon(NEW_EXPAND));
-		courseInfoToggle.setName("courseInfoToggle_" + searchResult.id);
+		courseInfoToggle.setName("courseInfoToggle_" + searchResult.courseNum);
 		
 		courseBar.add(courseNameContainer, BorderLayout.CENTER);
 		courseBar.add(courseInfoToggle, BorderLayout.EAST);
@@ -354,7 +354,7 @@ public class ResultsPanel extends JPanel {
 
     private void registerButton(java.awt.event.ActionEvent evt, Course c, List<Course> results, List<JPanel> panels) {
     	if (CourseSearch.registeredCourses.contains(c)) {
-    		JOptionPane.showMessageDialog(this, "You've already registered for " + c.id + " (CRN: " + c.crn + ").");
+    		JOptionPane.showMessageDialog(this, "You've already registered for " + c.courseNum + " (CRN: " + c.crn + ").");
     		return;
     	}
         CourseSearch.registeredCourses.add(c);
@@ -362,7 +362,7 @@ public class ResultsPanel extends JPanel {
         registerButton.setText("Registered");
         
         this.indicateConflictingCoursesWithCourse(c, results, panels);
-        JOptionPane.showMessageDialog(this, c.id + " (CRN: " + c.crn + ") Successfully Registered.");
+        JOptionPane.showMessageDialog(this, c.courseNum + " (CRN: " + c.crn + ") Successfully Registered.");
     }
     
     public void indicateConflictingCoursesWithSchedule(List<Course> results, List<JPanel> panels) {
@@ -426,10 +426,10 @@ public class ResultsPanel extends JPanel {
     	if (CourseSearch.registeredCourses.contains(c)) {
             CourseSearch.registeredCourses.remove(c);
             this.resetConflictedCoursesWithCourse(c, results, panels);
-    		JOptionPane.showMessageDialog(this, c.id + " (CRN: " + c.crn + ") was successfully removed from your schedule.");
+    		JOptionPane.showMessageDialog(this, c.courseNum + " (CRN: " + c.crn + ") was successfully removed from your schedule.");
     		return;
     	}
-        JOptionPane.showMessageDialog(this, c.id + " (CRN: " + c.crn + ") is not yet in your schedule.");
+        JOptionPane.showMessageDialog(this, c.courseNum + " (CRN: " + c.crn + ") is not yet in your schedule.");
     }
     
     private void scheduleButton(java.awt.event.ActionEvent evt, Course currentCourse){

@@ -6,10 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.RestoreAction;
 
 public class DataRetriever {
 
@@ -17,6 +17,7 @@ public class DataRetriever {
 	private final Connection conn;
 	private final Statement statement;
 	private String query;
+	
 	
 	public DataRetriever() throws SQLException {
 		this.conn = DriverManager.getConnection(connString);
@@ -28,26 +29,32 @@ public class DataRetriever {
 	}
 	
 	public List<Course> getData(String whereQuery) throws SQLException {
-		this.query = "SELECT * FROM COURSE ";
-		if (!whereQuery.equals("")) {
-			this.query += whereQuery;
-		}
-		System.out.println(this.query); //For Debugging
+		this.query = "SELECT * FROM COURSE " + whereQuery;
+		System.out.println(this.query);
 		this.statement.executeQuery(this.query);
         ResultSet resultSet = statement.getResultSet();
         List<Course> courses = new ArrayList<>();
+        DateTimeFormatter HOURS_MINS_AM_PM = DateTimeFormatter.ofPattern("h:mm a");
         while (resultSet.next()) {
         	Course course = new Course();
-        	course.crn = resultSet.getString("crn");
-        	course.credits = resultSet.getDouble("credits");
-        	course.description = resultSet.getString("description");
-        	course.endTime = LocalTime.of(resultSet.getInt("endtimeHour"), resultSet.getInt("endtimeMinute"));
-        	course.id = resultSet.getString("id");
-        	course.location = resultSet.getString("location");
-        	course.name = resultSet.getString("name");
-        	course.professor = resultSet.getString("professor");
-        	course.startTime = LocalTime.of(resultSet.getInt("starttimeHour"), resultSet.getInt("starttimeMinute"));
-        	course.term = resultSet.getString("term");
+        	course.classroom = resultSet.getString("classroom");
+			course.courseNum = resultSet.getString("courseNum");
+			course.credits = resultSet.getInt("credits");
+			course.crn = resultSet.getString("crn");
+			course.depHeader = resultSet.getString("depHeader");
+			course.description = resultSet.getString("description");
+			course.isHonors = resultSet.getBoolean("isHonors");
+			course.location = resultSet.getString("location");
+			course.professor = resultSet.getString("professor");
+			course.semester = resultSet.getString("semester");
+			course.title = resultSet.getString("title");
+			
+			try {
+				course.endTime = LocalTime.parse(resultSet.getString("endtime").replace("am", "AM").replace("pm", "PM"), HOURS_MINS_AM_PM);
+				course.startTime = LocalTime.parse(resultSet.getString("starttime").replace("am", "AM").replace("pm", "PM"), HOURS_MINS_AM_PM);
+			}
+			catch (DateTimeParseException e) { }
+			
         	if (resultSet.getBoolean("monday")) {
         		course.days.add(Day.MONDAY);
         	}
@@ -68,6 +75,6 @@ public class DataRetriever {
         	}
         	courses.add(course);
         }
-		return courses;
+	return courses;
 	}
 }
